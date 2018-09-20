@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "28.0.2"
+
+    defaultConfig {
+        applicationId "es.source.code.activity"
+        minSdkVersion 19
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //在apk文件后边生成版本号信息
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.each {
+                //这里修改apk文件名
+                output -> output.outputFile = new File(output.outputFile.parent, "SCOS" + "_v${defaultConfig.versionName}.apk");
+//              output -> output.outputFile = new File(output.outputFile.parent, "app_${defaultConfig.applicationId }_"+ buildType.name + "_v${defaultConfig.versionName}-${releaseTime()}.apk");
+
+            }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+}

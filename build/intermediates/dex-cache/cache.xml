@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\release\internal_impl-21.0.3_669153f1aeaf975611d37a974bfcff64d6ce689b.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\release\com.android.support-support-v4-21.0.3_520d4e5b85be0e370a7193a5d845c50b9638f7d5.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\release\com.android.support-appcompat-v7-21.0.3_cdda5e5e7991af314369a58430b83ee4d786c9c6.jar" />
+    </item>
+    <item
+        jar="D:\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3_2c7b3f93a4765de67fc456e30fee656c798d7e65.jar" />
+    </item>
+
+</items>
