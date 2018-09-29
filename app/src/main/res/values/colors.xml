@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="btn_solid_default">#ffffff</color>
+    <color name="btn_solid_selected">#0090ff</color>
+    <color name="btn_stroke">#0090ff</color>
+
+    <color name="text_default">#0090ff</color>
+    <color name="text_selected">#ffffff</color>
+</resources>

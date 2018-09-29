@@ -1,11 +1,22 @@
 package es.source.code.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
+
+import es.source.code.utils.Const;
+
+/**
+ * Author: taoye
+ * Classname: SCOSEntry.java
+ * Description: APP入口，展示LOGO
+ * Date: 2018/9/17.
+ */
 
 public class SCOSEntry extends ActionBarActivity {
+
+    float x1 = 0 , x2 = 0; // 记录手指按下和离开屏幕时的横坐标
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,25 +24,29 @@ public class SCOSEntry extends ActionBarActivity {
         setContentView(R.layout.entry);
     }
 
+    //继承了Activity的onTouchEvent方法，直接监听点击事件
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_scosentry, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public boolean onTouchEvent(MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            // 当手指按下的时候
+            x1 = event.getX();
         }
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            // 当手指离开的时候
+            x2 = event.getX();
+            if(x1 - x2 > 50){
+                //  显示启动
+                // Intent intent = new Intent(SCOSEntry.this,MainScreen.class);
+                // startActivity(intent);
 
-        return super.onOptionsItemSelected(item);
+                //  隐式启动
+                Intent intent = new Intent("scos.intent.action.SCOSMAIN");
+                //  intent.setAction("scos.intent.action.SCOSMAIN");
+                // intent.addCategory("scos.intent.category.SCOSLAUNCHER");
+                intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.FROM_ENTRY);
+                startActivity(intent);
+            }
+        }
+        return super.onTouchEvent(event);
     }
 }

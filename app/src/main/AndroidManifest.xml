@@ -17,6 +17,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainScreen"
+            android:label="@string/app_name"
+            android:permission="scos.permission.ACCESSCOS">
+            <intent-filter>
+                <action android:name="scos.intent.action.SCOSMAIN" />
+                <!--android.intent.category.DEFAULT 是一种默认的 category，在调用startActivity()方法的时候会自动将这category添加到 Intent中-->
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="scos.intent.category.SCOSLAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginOrRegister"
+            android:label="@string/app_name">
+
+        </activity>
     </application>
 
+    <permission android:name="scos.permission.ACCESSCOS"
+        android:protectionLevel="dangerous"/>
 </manifest>

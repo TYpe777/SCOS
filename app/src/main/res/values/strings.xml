@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">SCOS</string>
     <string name="action_settings">Settings</string>
+
+    <!--主界面的四个Button上的文字-->
+    <string name="main_order">点菜</string>
+    <string name="main_vieworders">查看订单</string>
+    <string name="main_loginorup">登录/注册</string>
+    <string name="main_help">系统帮助</string>
+
+    <!--登录/注册界面控件上的文字-->
+    <string name="login_uid">登录名</string>
+    <string name="login_pwd">登录密码</string>
+    <string name="login_login">登录</string>
+    <string name="login_quit">退出</string>
 </resources>
