@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--点击Button，改变字体颜色-->
+<!--点击MainScreen中的导航按钮，改变字体颜色-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false" android:color="@color/text_default"/>
     <item android:state_pressed="true" android:color="@color/text_selected"/>

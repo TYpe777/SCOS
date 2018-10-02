@@ -17,13 +17,15 @@ public class Const {
         public static final String LOGIN_SUCC = "LoginSuccess";
         // 从LoginOrRegister的“返回键”返回MainScreen
         public static final String RETURN = "Return";
+        // 从外部第三方APP跳转MainScreen
+        public static final String FROM_THIRDPARTY = "FromThirdParty";
     }
 
     public static class InputRegularExpr {
         // 设置uid的正则表达式。不能为空，只能输入英文大小写和数字
-        public static final String REGULAR_UID = "^[A-Za-z1-9_-]+$";
+        public static final String REGULAR_UID = "^[1-9a-zA-Z]+$";
         // 设置pwd的正则表达式。不能为空，只能输入英文大小写和数字
-        public static final String REGULAR_PWD = "^[A-Za-z1-9_-]+$";
+        public static final String REGULAR_PWD = "^[1-9a-zA-Z]+$";
     }
 
     public static class RequestCode {
@@ -40,12 +42,12 @@ public class Const {
 
     public static class SetError {
         // 提示uid格式错误
-        public static final String UID_FROMATERROR = "输入内容不符合规则";
+        public static final String UID_FROMAT_ERROR = "输入内容不符合规则";
         // 提示uid超过字符数限制
-        public static final String UID_NUMBERERROR = "登录名不得多于50位";
+        public static final String UID_NUMBER_ERROR = "登录名不得多于50位";
         // 提示pwd格式错误
-        public static final String PWD_FROMATERROR = "输入内容不符合规则";
+        public static final String PWD_FROMAT_ERROR = "输入内容不符合规则";
         // 提示pwd未达到字符数要求
-        public static final String PWD_NUMBERERROR = "密码不得少于6位";
+        public static final String PWD_NUMBER_ERROR = "密码不得少于6位";
     }
 }

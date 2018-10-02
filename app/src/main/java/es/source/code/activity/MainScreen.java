@@ -40,7 +40,8 @@ public class MainScreen extends ActionBarActivity implements OnClickListener{
 
         btn_loginorup.setOnClickListener(this);
 
-        handleIntentMsg();
+        intent = getIntent();
+        handleIntentMsg(intent);
     }
 
     @Override
@@ -58,9 +59,10 @@ public class MainScreen extends ActionBarActivity implements OnClickListener{
         super.onActivityResult(requestCode,resultCode,intent);
         switch(resultCode){
             case Const.RespondCode.RETURN:
-                handleIntentMsg();
+                handleIntentMsg(intent);
                 break;
             case Const.RespondCode.LOGINSUCC:
+                handleIntentMsg(intent);
                 break;
         }
     }
@@ -69,21 +71,21 @@ public class MainScreen extends ActionBarActivity implements OnClickListener{
      * Author: taoye
      * Description: 处理Intent携带的信息
      */
-    private void handleIntentMsg(){
-        intent = getIntent();
+    private void handleIntentMsg(Intent intent){
         String message = intent.getStringExtra(Const.IntentMsg.MESSAGE);
-        if(message != null){
-            if(!message.equals(Const.IntentMsg.FROM_ENTRY) && !message.equals(Const.IntentMsg.RETURN)){
-                btn_order.setVisibility(View.GONE);
-                btn_vieworders.setVisibility(View.GONE);
+        if(message == null){
+            message = Const.IntentMsg.FROM_THIRDPARTY;
+        }
+        if(!message.equals(Const.IntentMsg.FROM_ENTRY) && !message.equals(Const.IntentMsg.RETURN)){
+            btn_order.setVisibility(View.GONE);
+            btn_vieworders.setVisibility(View.GONE);
+        }
+        if(message.equals(Const.IntentMsg.LOGIN_SUCC)){
+            if(btn_order.getVisibility() != View.VISIBLE){
+                btn_order.setVisibility(View.VISIBLE);
             }
-            if(message.equals(Const.IntentMsg.LOGIN_SUCC)){
-                if(btn_order.getVisibility() != View.VISIBLE){
-                    btn_order.setVisibility(View.VISIBLE);
-                }
-                if(btn_vieworders.getVisibility() != View.VISIBLE){
-                    btn_vieworders.setVisibility(View.VISIBLE);
-                }
+            if(btn_vieworders.getVisibility() != View.VISIBLE){
+                btn_vieworders.setVisibility(View.VISIBLE);
             }
         }
     }

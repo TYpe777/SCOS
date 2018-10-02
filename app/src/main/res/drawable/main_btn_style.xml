@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--MainScreen界面中四个导航按钮的样式-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--点击背景-->
     <item android:state_pressed="true">

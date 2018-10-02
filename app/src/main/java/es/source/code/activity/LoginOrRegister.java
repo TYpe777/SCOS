@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import es.source.code.utils.Const;
-import es.source.code.utils.InputRegularExpr;
 
 /**
  * Author: taoye
@@ -70,17 +69,18 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
                 et_pwd.removeTextChangedListener(tw_pwd);
 
                 if(!"".equals(et_uid.getText().toString())) {
-                    if(et_uid.length() > 50){
-                        et_uid.setError(Const.SetError.UID_NUMBERERROR);
+                    if(et_uid.length() > 50){ // 登录名不得多于50个字符
+                        et_uid.setError(Const.SetError.UID_NUMBER_ERROR);
                         isVaildUid = false;
                     }
-                    if (!charSequence.toString().matches(InputRegularExpr.REGULAR_UID)){
-                        et_uid.setError(Const.SetError.UID_FROMATERROR);
+                    // 登录名要满足正则表达式
+                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)){
+                        et_uid.setError(Const.SetError.UID_FROMAT_ERROR);
                         isVaildUid = false;
                     }
-                    if(et_uid.length() <= 50 && charSequence.toString().matches(InputRegularExpr.REGULAR_UID)){
+                    if(et_uid.length() <= 50 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)){
                         et_uid.setError(null);
-                        isVaildUid = true;
+                        isVaildUid = true; // boolean值，标记登录名是否合法
                     }
                 } else {
                     et_uid.setError(null);
@@ -108,14 +108,14 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
 
                 if(!"".equals(et_pwd.getText().toString())) {
                     if(et_pwd.length() < 6){
-                        et_pwd.setError(Const.SetError.PWD_NUMBERERROR);
+                        et_pwd.setError(Const.SetError.PWD_NUMBER_ERROR);
                         isVaildPwd = false;
                     }
-                    if (!charSequence.toString().matches(InputRegularExpr.REGULAR_PWD)){
-                        et_pwd.setError(Const.SetError.PWD_FROMATERROR);
+                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)){
+                        et_pwd.setError(Const.SetError.PWD_FROMAT_ERROR);
                         isVaildPwd = false;
                     }
-                    if(et_pwd.length() >= 6 && charSequence.toString().matches(InputRegularExpr.REGULAR_PWD)){
+                    if(et_pwd.length() >= 6 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)){
                         et_pwd.setError(null);
                         isVaildPwd = true;
                     }
@@ -169,12 +169,11 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
                 try{
                     Thread.sleep(2000);
                     pd_load.dismiss();
-                    if(isVaildPwd && isVaildUid){
+                    if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
                         intent = new Intent("scos.intent.action.SCOSMAIN");
                         intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.LOGIN_SUCC);
                         setResult(Const.RespondCode.LOGINSUCC ,intent);
                         finish();
-
                         Looper.prepare();
                         Toast.makeText(LoginOrRegister.this,"登录成功",Toast.LENGTH_SHORT).show();
                         Looper.loop();
