@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import es.source.code.model.User;
 import es.source.code.utils.Const;
 
 /**
@@ -24,15 +25,16 @@ import es.source.code.utils.Const;
 
 public class LoginOrRegister extends ActionBarActivity implements OnClickListener {
 
-    private Button btn_login,btn_quit;
+    private Button btn_login,btn_quit,btn_register;
     private EditText et_uid,et_pwd;
-    private TextWatcher tw_uid,tw_pwd;
     private ProgressDialog pd_load;
     private Intent intent;
 
     private Boolean isVaildUid = false; // 标记uid输入是否合法
     private Boolean isVaildPwd = false; // 标记pwd输入是否合法
-    private String beforeContent;
+    private User loginUser = null;
+    private String name,password;
+    private boolean oldUser;
 
     @Override
     protected void onCreate(Bundle saveInstanceState){
@@ -49,36 +51,31 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
     private void init(){
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_quit = (Button) findViewById(R.id.btn_login_quit);
-        et_uid = (EditText) findViewById(R.id.et_uid);
-        et_pwd = (EditText) findViewById(R.id.et_pwd);
-
-        pd_load = new ProgressDialog(this); // 创建一个新的ProgressDialog
-
+        btn_register = (Button) findViewById(R.id.btn_login_register);
         btn_login.setOnClickListener(this);
         btn_quit.setOnClickListener(this);
+        btn_register.setOnClickListener(this);
 
-        // et_uid 的监听器
-        tw_uid = new TextWatcher() {
+        et_uid = (EditText) findViewById(R.id.et_uid);
+        et_pwd = (EditText) findViewById(R.id.et_pwd);
+        et_uid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // 当对“登录名”EditText输入时，移除对其他EditText的监听，以避免死循环。
-                et_pwd.removeTextChangedListener(tw_pwd);
-
-                if(!"".equals(et_uid.getText().toString())) {
-                    if(et_uid.length() > 50){ // 登录名不得多于50个字符
+                if (!"".equals(et_uid.getText().toString())) {
+                    if (et_uid.length() > 50) { // 登录名不得多于50个字符
                         et_uid.setError(Const.SetError.UID_NUMBER_ERROR);
                         isVaildUid = false;
                     }
                     // 登录名要满足正则表达式
-                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)){
+                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)) {
                         et_uid.setError(Const.SetError.UID_FROMAT_ERROR);
                         isVaildUid = false;
                     }
-                    if(et_uid.length() <= 50 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)){
+                    if (et_uid.length() <= 50 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_UID)) {
                         et_uid.setError(null);
                         isVaildUid = true; // boolean值，标记登录名是否合法
                     }
@@ -90,32 +87,26 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //  完成对“登录名”EditText的输入后，为其他EditText恢复监听。
-                et_pwd.addTextChangedListener(tw_pwd);
             }
-        };
 
-        // et_pwd的监听器
-        tw_pwd = new TextWatcher() {
+        });
+        et_pwd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // 当对“登录密码”EditText输入时，移除对其他EditText的监听，以避免死循环。
-                et_uid.removeTextChangedListener(tw_uid);
-
-                if(!"".equals(et_pwd.getText().toString())) {
-                    if(et_pwd.length() < 6){
+                if (!"".equals(et_pwd.getText().toString())) {
+                    if (et_pwd.length() < 6) {
                         et_pwd.setError(Const.SetError.PWD_NUMBER_ERROR);
                         isVaildPwd = false;
                     }
-                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)){
+                    if (!charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)) {
                         et_pwd.setError(Const.SetError.PWD_FROMAT_ERROR);
                         isVaildPwd = false;
                     }
-                    if(et_pwd.length() >= 6 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)){
+                    if (et_pwd.length() >= 6 && charSequence.toString().matches(Const.InputRegularExpr.REGULAR_PWD)) {
                         et_pwd.setError(null);
                         isVaildPwd = true;
                     }
@@ -127,26 +118,25 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // 完成对“登录密码”EditText的输入后，为其他EditText恢复监听。
-                et_uid.addTextChangedListener(tw_uid);
             }
-        };
+        });
 
-        // 将监听器绑定到相应的控件上
-        et_uid.addTextChangedListener(tw_uid);
-        et_pwd.addTextChangedListener(tw_pwd);
+        pd_load = new ProgressDialog(this); // 创建一个新的ProgressDialog
     }
 
     @Override
     public void onClick(View view){
         switch(view.getId()){
             case R.id.btn_login:
-                loadProgressDialog();
+                loadProgressDialog("login");
+                break;
+            case R.id.btn_login_register:
+                loadProgressDialog("register");
                 break;
             case R.id.btn_login_quit:
                 intent = new Intent("scos.intent.action.SCOSMAIN");
                 intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.RETURN);
-                setResult(Const.RespondCode.RETURN , intent);
+                setResult(Const.RespondCode.FROM_LOGINORREGISTER , intent);
                 finish();
                 break;
         }
@@ -156,36 +146,79 @@ public class LoginOrRegister extends ActionBarActivity implements OnClickListene
      * Author: taoye
      * Description: 绘制一个ProgressDialog，持续2秒钟。同时完成对uid和pwd的验证
      */
-    private void loadProgressDialog(){
+    private void loadProgressDialog(String action){
         pd_load.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd_load.setCancelable(false);
         pd_load.setCancelable(false);
-        pd_load.setMessage("登录中...");
-        pd_load.show();
+        if(action.equals("login")){
+            pd_load.setMessage("登录中...");
+            pd_load.show();
+            new Thread(new Runnable(){
+                @Override
+                public void run(){
+                    try{
+                        Thread.sleep(2000);
+                        pd_load.dismiss();
+                        if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
+                            name = et_uid.getText().toString();
+                            password = et_pwd.getText().toString();
+                            oldUser = true;
+                            loginUser = new User(name,password,oldUser);
 
-        new Thread(new Runnable(){
-            @Override
-            public void run(){
-                try{
-                    Thread.sleep(2000);
-                    pd_load.dismiss();
-                    if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
-                        intent = new Intent("scos.intent.action.SCOSMAIN");
-                        intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.LOGIN_SUCC);
-                        setResult(Const.RespondCode.LOGINSUCC ,intent);
-                        finish();
-                        Looper.prepare();
-                        Toast.makeText(LoginOrRegister.this,"登录成功",Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }else {
-                        Looper.prepare();
-                        Toast.makeText(LoginOrRegister.this, "登录失败", Toast.LENGTH_LONG).show();
-                        Looper.loop();
+                            intent = new Intent("scos.intent.action.SCOSMAIN");
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.LOGIN_SUCC);
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);
+                            setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
+                            finish();
+
+                            Looper.prepare();
+                            Toast.makeText(LoginOrRegister.this,"登录成功",Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }else {
+                            Looper.prepare();
+                            Toast.makeText(LoginOrRegister.this, "登录失败", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                        }
+                    } catch(InterruptedException e){
+                        e.printStackTrace();
                     }
-                } catch(InterruptedException e){
-                    e.printStackTrace();
                 }
-            }
-        }).start();
+            }).start();
+        }
+        else{
+            pd_load.setMessage("注册中...");
+            pd_load.show();
+            new Thread(new Runnable(){
+                @Override
+                public void run(){
+                    try{
+                        Thread.sleep(2000);
+                        pd_load.dismiss();
+                        if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
+                            name = et_uid.getText().toString();
+                            password = et_pwd.getText().toString();
+                            oldUser = false;
+                            loginUser = new User(name,password,oldUser);
+
+                            intent = new Intent("scos.intent.action.SCOSMAIN");
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.REGISTER_SUCC);
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);
+                            setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
+                            finish();
+
+                            Looper.prepare();
+                            Toast.makeText(LoginOrRegister.this,"注册成功",Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }else {
+                            Looper.prepare();
+                            Toast.makeText(LoginOrRegister.this, "注册失败", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                        }
+                    } catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 }

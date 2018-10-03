@@ -1,20 +1,22 @@
 package es.source.code.utils;
 
 /**
- * Author: taoye
- * Classname: Const.java
- * Description: 常量类
- * Date: 2018/9/29.
+ * @author: taoye
+ * @date: 2018/9/29.
+ * @classname: Const.java
+ * @description: 常量类
  */
 
 public class Const {
 
     public static class IntentMsg {
         public static final String MESSAGE = "Message";
+        public static final String USER = "User";
         // 从SCOSEntry启动MainScreen
         public static final String FROM_ENTRY = "FromEntry";
         // 登录成功，从LoginOrRegister返回MainScreen
         public static final String LOGIN_SUCC = "LoginSuccess";
+        public static final String REGISTER_SUCC = "RegisterSuccess";
         // 从LoginOrRegister的“返回键”返回MainScreen
         public static final String RETURN = "Return";
         // 从外部第三方APP跳转MainScreen
@@ -34,10 +36,8 @@ public class Const {
     }
 
     public static class RespondCode {
-        // LoginOrRegister“返回键”返回MainScreen
-        public static final int RETURN = 0;
-        // 成功登录
-        public static final int LOGINSUCC = 1;
+        // LoginOrRegister返回MainScreen
+        public static final int FROM_LOGINORREGISTER = 0;
     }
 
     public static class SetError {

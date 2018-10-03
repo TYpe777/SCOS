@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.source.code.activity">
 
+    <permission android:name="scos.permission.ACCESSCOS"
+        android:protectionLevel="dangerous"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,10 +35,10 @@
         <activity
             android:name=".LoginOrRegister"
             android:label="@string/app_name">
-
+        </activity>
+        <activity
+            android:name=".FoodView"
+            android:label="@string/app_name">
         </activity>
     </application>
-
-    <permission android:name="scos.permission.ACCESSCOS"
-        android:protectionLevel="dangerous"/>
 </manifest>
