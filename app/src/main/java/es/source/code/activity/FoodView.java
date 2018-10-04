@@ -10,11 +10,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import es.source.code.Interface.Interface_AddOrderItem;
 import es.source.code.adapters.FoodViewAdapter;
 import es.source.code.fragment.ColdDishesFragment;
 import es.source.code.fragment.DrinksFragment;
 import es.source.code.fragment.HotDishesFragment;
 import es.source.code.fragment.SeafoodFragment;
+import es.source.code.model.Food;
+import es.source.code.model.OrderItem;
 
 /**
  * @author taoye
@@ -22,11 +28,13 @@ import es.source.code.fragment.SeafoodFragment;
  * @classname FoodView.java
  * @descripition 食物展示
  */
-public class FoodView extends AppCompatActivity {
+public class FoodView extends AppCompatActivity implements Interface_AddOrderItem{
 
     private Context mContext;
     private TabLayout tl_foodView;
     private ViewPager vp_foodView;
+
+    private List<OrderItem> orderList;//菜单列表
 
     private String[] mTitles = {"热菜","冷菜","海鲜","酒水"};
 
@@ -64,7 +72,19 @@ public class FoodView extends AppCompatActivity {
         }
     }
 
+    /**
+     * @author taoye
+     * @description 实现接口类。通过addOrderItem方法接受Fragment中传递来的Food对象，创建菜单项添加到菜单列表中
+     * @param food
+     */
+    @Override
+    public void addOrderItem(Food food){
+        orderList.add(new OrderItem(food));
+    }
+
     private void initViews(){
+        orderList = new ArrayList<OrderItem>();
+
         tl_foodView = (TabLayout) findViewById(R.id.tl_foodView);
         vp_foodView = (ViewPager) findViewById(R.id.vp_foodView);
 

@@ -1,5 +1,6 @@
 package es.source.code.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.source.code.Interface.Interface_AddOrderItem;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
@@ -27,6 +29,14 @@ public class ColdDishesFragment extends Fragment {
     private View mView;
     private ListView lv_coldDishes;
     private List<Food> foods;
+
+
+    private Interface_AddOrderItem interface_addOrderItem;//声明接口
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        interface_addOrderItem = (Interface_AddOrderItem) activity;
+    }
 
     @Nullable
     @Override
@@ -82,9 +92,11 @@ public class ColdDishesFragment extends Fragment {
 
                 String fName = foods.get(pos).getName();
                 String fPrice = Float.toString(foods.get(pos).getPrice());
-
                 Toast.makeText(mContext,"点菜成功",Toast.LENGTH_SHORT).show();
                 btn.setText("已点");
+
+                // 通过调用接口，将food实例传递给activity。再由activity添加进菜单列表中。
+                interface_addOrderItem.addOrderItem(foods.get(pos));//调用接口
             }else{
                 Toast.makeText(mContext,"已经点菜",Toast.LENGTH_SHORT).show();
             }
