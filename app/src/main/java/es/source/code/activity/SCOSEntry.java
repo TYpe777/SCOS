@@ -2,20 +2,20 @@ package es.source.code.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import es.source.code.utils.Const;
 
 /**
- * Author: taoye
- * Classname: SCOSEntry.java
- * Description: APP入口，展示LOGO
- * Date: 2018/9/17.
+ * @author taoye
+ * @date 2018/9/17.
+ * @classname SCOSEntry.java
+ * @description: APP入口，展示LOGO
  */
 
-public class SCOSEntry extends ActionBarActivity {
+public class SCOSEntry extends AppCompatActivity {
 
     float x1 = 0 , x2 = 0; // 记录手指按下和离开屏幕时的横坐标
 

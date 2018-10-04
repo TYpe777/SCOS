@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="btn_solid_default">#ffffff</color>
-    <color name="btn_solid_selected">#0090ff</color>
-    <color name="btn_stroke">#0090ff</color>
+    <!--系统默认Theme颜色-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 
-    <color name="text_default">#0090ff</color>
-    <color name="text_selected">#ffffff</color>
+    <!--自定义Theme颜色-->
+    <color name="myPrimary">#B2DFEE</color>
+    <color name="myPrimaryDark">#ADD8E6</color>
+    <color name="myAccent">#9F79EE</color>
+
+    <color name="tab_backgound">#B2DFEE</color>
+    <color name="lv_dividingline">#AEEEEE</color>
+
+    <!--自定义Button-->
+    <color name="btn_solid_default">#ffffff</color>
+    <color name="btn_solid_selected">#9F79EE</color>
+    <color name="btn_stroke">#9F79EE</color>
+    <!--<color name="btn_solid_selected">#0090ff</color>-->
+    <!--<color name="btn_stroke">#0090ff</color>-->
+
+    <!--Button中文本颜色-->
+    <color name="text_default">#9F79EE</color>
+    <color name="text_selected">#FFFFFF</color>
 </resources>

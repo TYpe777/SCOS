@@ -32,7 +32,7 @@ public class Const {
 
     public static class RequestCode {
         // MainScreen启动LoginOrRegister
-        public static final int LOGINORPEGISTER = 0;
+        public static final int MAINSCREEN = 0;
     }
 
     public static class RespondCode {

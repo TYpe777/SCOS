@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,13 +17,13 @@ import es.source.code.model.User;
 import es.source.code.utils.Const;
 
 /**
- * Author: taoye
- * Classname: LoginOrRegister.java
- * Description: 登录和注册
- * Date: 2018/9/26.
+ * @author taoye
+ * @date 2018/9/26.
+ * @classname LoginOrRegister.java
+ * @description 登录和注册
  */
 
-public class LoginOrRegister extends ActionBarActivity implements OnClickListener {
+public class LoginOrRegister extends AppCompatActivity implements OnClickListener {
 
     private Button btn_login,btn_quit,btn_register;
     private EditText et_uid,et_pwd;
