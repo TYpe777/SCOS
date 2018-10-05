@@ -14,7 +14,10 @@ import es.source.code.model.Food;
 import es.source.code.model.OrderItem;
 
 /**
- * Created by taoye on 2018/10/4.
+ * @taoye
+ * @date 2018/10/4.
+ * @classname OrderedListViewAdapter.java
+ * @description FoodOrderView界面中“已下单菜”中的ListView控件的适配器
  */
 public class OrderedListViewAdapter extends BaseAdapter {
 

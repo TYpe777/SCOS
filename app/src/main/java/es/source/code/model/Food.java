@@ -1,6 +1,9 @@
 package es.source.code.model;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author taoye
@@ -9,7 +12,7 @@ import java.io.Serializable;
  * @description 食物类
  */
 public class Food implements Serializable{
-    private int image; // 食物的图片
+    private Drawable image; // 食物的图片
     private String name; // 食物的名称
     private float price; // 食物的价格
     private String description; // 食物的描述
@@ -20,7 +23,7 @@ public class Food implements Serializable{
         this.name = name;
         this.price = price;
         this.description = null;
-        this.image = 0;
+        this.image = null;
     }
 
     public Food(String name,float price,String description){
@@ -29,7 +32,7 @@ public class Food implements Serializable{
         this.description = description;
     }
 
-    public Food(int image,String name,float price,String description){
+    public Food(Drawable image,String name,float price,String description){
         this.image = image;
         this.name = name;
         this.price = price;
@@ -37,7 +40,7 @@ public class Food implements Serializable{
     }
 
 
-    public int getImage(){
+    public Drawable getImage(){
         return image;
     }
 
@@ -53,7 +56,7 @@ public class Food implements Serializable{
         return description;
     }
 
-    public void setImage(int image){
+    public void setImage(Drawable image){
         this.image = image;
     }
 
@@ -67,5 +70,14 @@ public class Food implements Serializable{
 
     public void setDescription(String description){
         this.description = description;
+    }
+
+    // 判断食物是否在参数传入的订单中
+    public boolean inOrderList(List<OrderItem> orderList){
+        if(orderList != null)
+            for(int i=0;i<orderList.size();i++)
+                if(orderList.get(i).getFood().getName().equals(this.name))
+                    return true;
+        return false;
     }
 }

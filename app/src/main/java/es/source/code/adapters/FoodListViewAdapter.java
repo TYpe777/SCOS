@@ -14,7 +14,10 @@ import es.source.code.activity.R;
 import es.source.code.model.Food;
 
 /**
- * Created by taoye on 2018/10/4.
+ * @taoye
+ * @date 2018/10/4.
+ * @classname FoodListViewAdapter.java
+ * @description FoodView界面中ListView控件的适配器
  */
 public class FoodListViewAdapter extends BaseAdapter {
 

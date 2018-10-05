@@ -1,11 +1,13 @@
 package es.source.code.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.source.code.Interface.Interface_Pay;
 import es.source.code.activity.R;
 import es.source.code.adapters.OrderedListViewAdapter;
 import es.source.code.model.OrderItem;
@@ -27,13 +30,21 @@ import es.source.code.model.OrderItem;
  * @classname OrderedFragment.java
  * @description 已下单菜列表。对应FoodView界面的“查看订单”按钮
  */
-public class OrderedFragment extends Fragment {
+public class OrderedFragment extends Fragment implements OnClickListener{
     private Context mContext;
     private View mView;
     private ListView lv_ordered;
     private TextView tv_ordered_foodsum,tv_ordered_pricesum;
     private Button btn_pay;
     private List<OrderItem> orderList;
+
+    // 声明接口
+    private Interface_Pay interface_pay;
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        interface_pay = (Interface_Pay) activity;
+    }
 
     /**
      * 用来实现Activity向fragment中传递数据
@@ -70,6 +81,7 @@ public class OrderedFragment extends Fragment {
         tv_ordered_foodsum = (TextView) mView.findViewById(R.id.tv_foodorderview_ordered_foodsum);
         tv_ordered_pricesum = (TextView) mView.findViewById(R.id.tv_foodorderview_ordered_pricesum);
         btn_pay = (Button) mView.findViewById(R.id.btn_foodorderview_ordered_pay);
+        btn_pay.setOnClickListener(this);
 
         orderList = new ArrayList<OrderItem>();
 
@@ -98,6 +110,16 @@ public class OrderedFragment extends Fragment {
         }
         tv_ordered_pricesum.setText("订单总价:" + pricesum);
 
+    }
+
+    @Override
+    public void onClick(View view){
+        switch(view.getId()){
+            case R.id.btn_foodorderview_ordered_pay:
+                // 在FoodOrderView中对用户对象做相应处理
+                interface_pay.pay(); // 调用接口
+                break;
+        }
     }
 
     private class OnItemClickHandler implements AdapterView.OnItemClickListener{

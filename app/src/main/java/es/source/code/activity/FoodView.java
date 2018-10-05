@@ -12,10 +12,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import es.source.code.Interface.Interface_HandleOrderItem;
+import es.source.code.Interface.Interface_ShowFoodDetailed;
 import es.source.code.adapters.FoodViewPagerAdapter;
 import es.source.code.fragment.ColdDishesFragment;
 import es.source.code.fragment.DrinksFragment;
@@ -23,6 +23,7 @@ import es.source.code.fragment.HotDishesFragment;
 import es.source.code.fragment.SeafoodFragment;
 import es.source.code.model.Food;
 import es.source.code.model.OrderItem;
+import es.source.code.model.User;
 import es.source.code.utils.Const;
 import es.source.code.utils.FoodList;
 
@@ -32,13 +33,14 @@ import es.source.code.utils.FoodList;
  * @classname FoodView.java
  * @descripition 食物展示。包含“热菜”、“冷菜”、“海鲜”和“酒水”
  */
-public class FoodView extends AppCompatActivity implements Interface_HandleOrderItem {
+public class FoodView extends AppCompatActivity implements Interface_HandleOrderItem,Interface_ShowFoodDetailed {
 
     private Context mContext;// 上下文
     private Intent intent;
     private TabLayout tl_foodView;
     private ViewPager vp_foodView;
 
+    private User loginUser; // 当前用户
     private FoodList foodList; // 菜单列表
     private List<OrderItem> orderList;//订单列表
 
@@ -68,13 +70,15 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
             case R.id.menu_ordered: // 已点菜品
                 intent = new Intent(FoodView.this,FoodOrderView.class);
                 intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_UNORDERED); // 设置FoodOrderView的初始默认页。对应“未下单菜”
-                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+//                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+                intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent, Const.RequestCode.FOODVIEW_ORDERED);
                 return true;
             case R.id.menu_vieworders: // 查看订单
                 intent = new Intent(FoodView.this,FoodOrderView.class);
                 intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_ORDERED); // 设置FoodOrderView的初始默认页。对应“已下单菜”
-                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+//                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+                intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent,Const.RequestCode.FOODVIEW_VIEWORDER);
                 return true;
             case R.id.menu_help: // 系统帮助
@@ -97,12 +101,13 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
 
     /**
      * @author taoye
-     * @description 实现接口类。通过addOrderItem方法接受Fragment中传递来的Food对象，创建订单项添加到订单列表中
+     * @description 实现接口类Interface_HandleOrderItem。通过addOrderItem方法接受Fragment中传递来的Food对象，创建订单项添加到订单列表中
      * @param food
      */
     @Override
     public void addOrderItem(Food food){
         orderList.add(new OrderItem(food));
+        loginUser.setOrderList(orderList);// 将订单列表同步到当前的用户对象中
     }
     // 通过addOrderItem方法接受Fragment中传递来的Food对象，删除订单列表中指定的订单项
     @Override
@@ -116,7 +121,32 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                 }
             }
             orderList.remove(i);
+            loginUser.setOrderList(orderList);// 将订单列表同步到当前的用户对象中
         }
+    }
+
+    /**
+     * @author taoye
+     * @description 实现接口类Interface_ShowFoodDetailed。实现点击菜品项，进入菜品具体信息页面
+     * @param foodType
+     * @param index
+     */
+    @Override
+    public void showFoodDetailed(String foodType,int index){
+        intent = new Intent(mContext,FoodDetailed.class);
+        if("HotDishes".equals(foodType)){
+            intent.putExtra("FoodList",(Serializable)foodList.getHotDishes());
+        } else if("ColdDishes".equals(foodType)){
+            intent.putExtra("FoodList",(Serializable)foodList.getColdDishes());
+        }else if("Drinks".equals(foodType)){
+            intent.putExtra("FoodList",(Serializable)foodList.getDrinks());
+        }else {
+            intent.putExtra("FoodList",(Serializable)foodList.getSeafood());
+        }
+//        intent.putExtra("OrderList",(Serializable)orderList);
+        intent.putExtra(Const.IntentMsg.USER,loginUser);
+        intent.putExtra("Index",index);
+        startActivityForResult(intent,10);
     }
 
     /**
@@ -124,8 +154,11 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
      * @description 初始化视图
      */
     private void initViews(){
+        intent = getIntent();
+        loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
+        orderList = loginUser.getOrderList();
         foodList = new FoodList();
-        orderList = new ArrayList<OrderItem>();
+//        orderList = new ArrayList<OrderItem>();
 
         tl_foodView = (TabLayout) findViewById(R.id.tl_foodView);
         vp_foodView = (ViewPager) findViewById(R.id.vp_foodView);

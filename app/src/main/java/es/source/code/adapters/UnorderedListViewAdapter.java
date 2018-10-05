@@ -14,7 +14,10 @@ import es.source.code.activity.R;
 import es.source.code.model.OrderItem;
 
 /**
- * Created by taoye on 2018/10/4.
+ * @taoye
+ * @date 2018/10/4.
+ * @classname UnorderedListViewAdapter.java
+ * @description FoodOrderView界面中“未下单菜”中的ListView控件的适配器
  */
 public class UnorderedListViewAdapter extends BaseAdapter{
     private LayoutInflater inflater;

@@ -9,7 +9,7 @@ import es.source.code.model.Food;
  * @author taoye
  * @date 2018/10/5.
  * @classname FoodList.java
- * @description 菜单
+ * @description 菜单。在FoodView中使用
  */
 public class FoodList {
     private  List<Food> HotDishes;

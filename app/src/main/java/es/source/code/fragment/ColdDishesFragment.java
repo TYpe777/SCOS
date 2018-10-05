@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.source.code.Interface.Interface_HandleOrderItem;
+import es.source.code.Interface.Interface_ShowFoodDetailed;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
@@ -34,6 +35,16 @@ public class ColdDishesFragment extends Fragment {
     private ListView lv_coldDishes;
     private List<Food> foods;
 
+    //声明接口
+    private Interface_HandleOrderItem interface_handleOrderItem;
+    private Interface_ShowFoodDetailed interface_showFoodDetailed;
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        interface_handleOrderItem = (Interface_HandleOrderItem) activity;
+        interface_showFoodDetailed = (Interface_ShowFoodDetailed) activity;
+    }
+
     /**
      * 用来实现Activity向fragment中传递数据
      * Use this factory method to create a new instance of
@@ -47,13 +58,6 @@ public class ColdDishesFragment extends Fragment {
         bundle_foodlist.putSerializable("FoodList",(Serializable) foodList);
         coldDishesFragment.setArguments(bundle_foodlist);
         return coldDishesFragment;
-    }
-
-    private Interface_HandleOrderItem interface_handleOrderItem;//声明接口
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        interface_handleOrderItem = (Interface_HandleOrderItem) activity;
     }
 
     @Nullable
@@ -78,17 +82,6 @@ public class ColdDishesFragment extends Fragment {
 
         if(getArguments() != null){
             foods = (List<Food>)getArguments().getSerializable("FoodList");
-        } else{
-            foods.add(new Food("梨汁肋排",45));
-            foods.add(new Food("麻婆豆腐",20));
-            foods.add(new Food("牛肉炖土豆",50));
-            foods.add(new Food("糯米团子",25));
-            foods.add(new Food("清蒸大闸蟹",80));
-            foods.add(new Food("肉螺炒牛蛙",45));
-            foods.add(new Food("土豆炖牛腩",50));
-            foods.add(new Food("香菇油菜",18));
-            foods.add(new Food("响油泥鳅",45));
-            foods.add(new Food("猪肉炖粉条",40));
         }
 
         FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext,foods,onClickListener);
@@ -101,7 +94,8 @@ public class ColdDishesFragment extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> parent,View view,int position,long id){
-            Toast.makeText(mContext, "点击了" + foods.get(position).getName(), Toast.LENGTH_SHORT).show();
+            // 实现点击菜单项，打开对应菜品的详细信息界面
+            interface_showFoodDetailed.showFoodDetailed("ColdDishes",position); // 调用接口
         }
     }
 
@@ -111,12 +105,12 @@ public class ColdDishesFragment extends Fragment {
             Button btn = (Button) v;
             int pos = (Integer) btn.getTag();
             if("点菜".equals(btn.getText().toString())){
-                // 通过调用接口，将food实例传递给activity。再由activity添加进菜单列表中。
+                // 通过调用接口，将food实例传递给activity。再由activity添加进订单列表中。
                 interface_handleOrderItem.addOrderItem(foods.get(pos));//调用接口
                 Toast.makeText(mContext,"点菜成功",Toast.LENGTH_SHORT).show();
                 btn.setText("退点");
             }else{
-                // 通过调用接口，将food实例传递给activity。再由activity添加进菜单列表中。
+                // 通过调用接口，将food实例传递给activity。再由activity添加进订单列表中。
                 interface_handleOrderItem.removeOrderItem(foods.get(pos));//调用接口
                 Toast.makeText(mContext,"退订成功",Toast.LENGTH_SHORT).show();
                 btn.setText("点菜");

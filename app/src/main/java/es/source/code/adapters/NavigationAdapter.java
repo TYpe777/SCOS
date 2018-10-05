@@ -13,7 +13,8 @@ import es.source.code.activity.R;
 /**
  * @author taoye
  * @date 2018/10/2
- * @description 自定义的GridView适配器
+ * @classname NavigationAdapter
+ * @description MainScreen界面的GridView适配器
  */
 public class NavigationAdapter extends BaseAdapter {
     private int[] images;

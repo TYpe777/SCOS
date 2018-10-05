@@ -57,8 +57,19 @@ public class MainScreen extends AppCompatActivity {
                         startActivityForResult(intent, Const.RequestCode.MAINSCREEN);
                         break;
                     case R.mipmap.ic_order_navigation:
-                        intent = new Intent(mContext, FoodView.class);
-                        startActivityForResult(intent, Const.RequestCode.MAINSCREEN);
+                        if (loginUser != null) {
+                            intent = new Intent(mContext, FoodView.class);
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);// 将当前的用户对象传递给FoodView
+                            startActivityForResult(intent, Const.RequestCode.MAINSCREEN);
+                        }
+                        break;
+                    case R.mipmap.ic_vieworder_navigation:
+                        if (loginUser != null) {
+                            intent = new Intent(mContext, FoodOrderView.class);
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);// 将当前的用户对象传递给FoodOrderView
+                            intent.putExtra(Const.IntentMsg.DEFAULTPAGE, Const.IntentMsg.PAGE_UNORDERED);// 默认初始页为“未下单菜”
+                            startActivityForResult(intent, Const.RequestCode.MAINSCREEN);
+                        }
                         break;
                 }
             }

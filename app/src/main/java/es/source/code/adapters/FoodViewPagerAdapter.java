@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by taoye on 2018/10/4.
+ * @taoye
+ * @date 2018/10/4.
+ * @classname FoodViewPagerAdapter.java
+ * @description FoodView界面中TabLayout+ViewPager实现Tab切换的适配器
  */
 public class FoodViewPagerAdapter extends FragmentPagerAdapter {
     List<Fragment> list;
