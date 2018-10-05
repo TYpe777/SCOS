@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--指示栏-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:layout_marginStart="2dp"
+            android:text="菜名"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="价格"
+            android:textSize="15sp"/>
+
+        <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="数量"
+        android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="备注"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <!--指示栏与ListView之间的分割线-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5px"
+        android:background="@color/lv_dividingline"/>
+
+    <ListView
+        android:id="@+id/lv_ordered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <!--结算栏与ListView之间的分割线-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5px"
+        android:background="@color/lv_dividingline"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_foodorderview_ordered_foodsum"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="菜品总数:" />
+
+        <TextView
+            android:id="@+id/tv_foodorderview_ordered_pricesum"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="订单总价:" />
+
+        <Button
+            android:id="@+id/btn_foodorderview_ordered_pay"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="@drawable/main_btn_style"
+            android:focusable="false"
+            android:text="结账"
+            android:textColor="@drawable/main_txt_style"/>
+
+    </LinearLayout>
+
+</LinearLayout>

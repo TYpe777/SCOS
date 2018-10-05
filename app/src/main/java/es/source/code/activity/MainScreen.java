@@ -78,16 +78,16 @@ public class MainScreen extends AppCompatActivity {
     private void handleIntentMsg(Intent intent){
         String message = intent.getStringExtra(Const.IntentMsg.MESSAGE);
         if(message == null){
-            message = Const.IntentMsg.FROM_THIRDPARTY;
+            message = Const.IntentMsg.MSG_FROM_THIRDPARTY;
         }
 
         switch(message){
-            case Const.IntentMsg.FROM_ENTRY:
+            case Const.IntentMsg.MSG_FROM_ENTRY:
                 gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                 isShowAll = true;
                 break;
 
-            case Const.IntentMsg.LOGIN_SUCC:
+            case Const.IntentMsg.MSG_LOGIN_SUCC:
                 if(!isShowAll){
                     gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                     isShowAll = true;
@@ -95,7 +95,7 @@ public class MainScreen extends AppCompatActivity {
                 loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
                 break;
 
-            case Const.IntentMsg.REGISTER_SUCC:
+            case Const.IntentMsg.MSG_REGISTER_SUCC:
                 if(!isShowAll){
                     gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                     isShowAll = true;
@@ -104,7 +104,7 @@ public class MainScreen extends AppCompatActivity {
                 Toast.makeText(mContext,"欢迎您成为 SCOS 新用户",Toast.LENGTH_SHORT).show();
                 break;
 
-            case Const.IntentMsg.FROM_THIRDPARTY:
+            case Const.IntentMsg.MSG_FROM_THIRDPARTY:
                 int[] images1 = {R.mipmap.ic_login_navigation,R.mipmap.ic_help_navigation};
                 String[] texts1 = {"登录/注册","系统帮助"};
                 gv_navigation.setAdapter(new NavigationAdapter(this, images1, texts1));

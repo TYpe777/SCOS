@@ -21,6 +21,6 @@
         app:tabGravity="fill"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="#E74C3C"
-        app:tabTextColor="#FCFCFC"/>
+        app:tabSelectedTextColor="@color/tab_text_selected"
+        app:tabTextColor="@color/tab_text_unselected"/>
 </LinearLayout>

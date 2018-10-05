@@ -47,7 +47,7 @@ public class SCOSEntry extends AppCompatActivity {
                 Intent intent = new Intent("scos.intent.action.SCOSMAIN");
                 // intent.setAction("scos.intent.action.SCOSMAIN");
                 // intent.addCategory("scos.intent.category.SCOSLAUNCHER");
-                intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.FROM_ENTRY);
+                intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_FROM_ENTRY);
                 startActivity(intent);
                 finish();
             }

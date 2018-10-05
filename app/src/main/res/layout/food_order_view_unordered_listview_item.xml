@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_foodorderview_unordered_name"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:text="菜名"/>
+
+    <TextView
+        android:id="@+id/tv_foodorderview_unordered_price"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="价格"/>
+
+    <TextView
+        android:id="@+id/tv_foodorderview_unordered_count"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="数量"/>
+
+    <TextView
+        android:id="@+id/tv_foodorderview_unordered_description"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.5"
+        android:gravity="center"
+        android:text="备注"/>
+
+    <Button
+        android:id="@+id/btn_foodorderview_unordered_unorder"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:background="@drawable/main_btn_style"
+        android:focusable="false"
+        android:text="退订"
+        android:textColor="@drawable/main_txt_style"/>
+
+</LinearLayout>

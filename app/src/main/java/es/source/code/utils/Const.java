@@ -10,17 +10,26 @@ package es.source.code.utils;
 public class Const {
 
     public static class IntentMsg {
+        // 标记Intent携带的数据是信息，字符串类型
         public static final String MESSAGE = "Message";
+        // 标记Intent携带的数据是用户对象，User类型
         public static final String USER = "User";
+        // 标记Intent携带的数据是初始默认页，int类型
+        public static final String DEFAULTPAGE = "DefaultPage";
+        // 初始默认页为“未下单菜”
+        public static final int PAGE_UNORDERED = 0;
+        // 初始默认页为“已下单菜”
+        public static final int PAGE_ORDERED = 1;
+
         // 从SCOSEntry启动MainScreen
-        public static final String FROM_ENTRY = "FromEntry";
+        public static final String MSG_FROM_ENTRY = "FromEntry";
         // 登录成功，从LoginOrRegister返回MainScreen
-        public static final String LOGIN_SUCC = "LoginSuccess";
-        public static final String REGISTER_SUCC = "RegisterSuccess";
+        public static final String MSG_LOGIN_SUCC = "LoginSuccess";
+        public static final String MSG_REGISTER_SUCC = "RegisterSuccess";
         // 从LoginOrRegister的“返回键”返回MainScreen
-        public static final String RETURN = "Return";
+        public static final String MSG_RETURN = "Return";
         // 从外部第三方APP跳转MainScreen
-        public static final String FROM_THIRDPARTY = "FromThirdParty";
+        public static final String MSG_FROM_THIRDPARTY = "FromThirdParty";
     }
 
     public static class InputRegularExpr {
@@ -31,8 +40,12 @@ public class Const {
     }
 
     public static class RequestCode {
-        // MainScreen启动LoginOrRegister
+        // MainScreen
         public static final int MAINSCREEN = 0;
+        // FoodView 的已点菜品
+        public static final int FOODVIEW_ORDERED = 1;
+        // FoodView 的查看订单
+        public static final int FOODVIEW_VIEWORDER = 2;
     }
 
     public static class RespondCode {

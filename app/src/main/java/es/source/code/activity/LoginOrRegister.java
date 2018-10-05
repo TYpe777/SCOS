@@ -135,7 +135,7 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                 break;
             case R.id.btn_login_quit:
                 intent = new Intent("scos.intent.action.SCOSMAIN");
-                intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.RETURN);
+                intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.MSG_RETURN);
                 setResult(Const.RespondCode.FROM_LOGINORREGISTER , intent);
                 finish();
                 break;
@@ -166,7 +166,7 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                             loginUser = new User(name,password,oldUser);
 
                             intent = new Intent("scos.intent.action.SCOSMAIN");
-                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.LOGIN_SUCC);
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_LOGIN_SUCC);
                             intent.putExtra(Const.IntentMsg.USER, loginUser);
                             setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
                             finish();
@@ -201,7 +201,7 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                             loginUser = new User(name,password,oldUser);
 
                             intent = new Intent("scos.intent.action.SCOSMAIN");
-                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.REGISTER_SUCC);
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_REGISTER_SUCC);
                             intent.putExtra(Const.IntentMsg.USER, loginUser);
                             setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
                             finish();

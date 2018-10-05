@@ -10,7 +10,11 @@
     <color name="myPrimaryDark">#ADD8E6</color>
     <color name="myAccent">#9F79EE</color>
 
+    <!--Tab颜色-->
     <color name="tab_backgound">#B2DFEE</color>
+    <color name="tab_text_selected">#E74C3C</color>
+    <color name="tab_text_unselected">#FCFCFC</color>
+
     <color name="lv_dividingline">#AEEEEE</color>
 
     <!--自定义Button-->

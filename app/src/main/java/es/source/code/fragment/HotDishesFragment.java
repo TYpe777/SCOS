@@ -13,16 +13,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.source.code.Interface.Interface_AddOrderItem;
+import es.source.code.Interface.Interface_HandleOrderItem;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
 
 /**
- * Created by taoye on 2018/10/4.
+ * @author taoye
+ * @date 2018/10/4.
+ * @classname HotDishesFragment.java
+ * @description 热菜展示页面。可以点菜，也可以退订
  */
 public class HotDishesFragment extends Fragment {
 
@@ -31,11 +35,26 @@ public class HotDishesFragment extends Fragment {
     private ListView lv_hotDishes;
     private List<Food> foods;
 
-    private Interface_AddOrderItem interface_addOrderItem;//声明接口
+    /**
+     * 用来实现Activity向fragment中传递数据
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     * @param foodList
+     * @return
+     */
+    public static HotDishesFragment newInstance(List<Food> foodList){
+        HotDishesFragment hotDishesFragment = new HotDishesFragment();
+        Bundle bundle_foodlist = new Bundle();
+        bundle_foodlist.putSerializable("FoodList",(Serializable) foodList);
+        hotDishesFragment.setArguments(bundle_foodlist);
+        return hotDishesFragment;
+    }
+
+    private Interface_HandleOrderItem interface_handleOrderItem;//声明接口
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        interface_addOrderItem = (Interface_AddOrderItem) activity;
+        interface_handleOrderItem = (Interface_HandleOrderItem) activity;
     }
 
     @Nullable
@@ -58,16 +77,20 @@ public class HotDishesFragment extends Fragment {
 
         foods = new ArrayList<Food>();
 
-        foods.add(new Food("梨汁肋排",45));
-        foods.add(new Food("麻婆豆腐",20));
-        foods.add(new Food("牛肉炖土豆",50));
-        foods.add(new Food("糯米团子",25));
-        foods.add(new Food("清蒸大闸蟹",80));
-        foods.add(new Food("肉螺炒牛蛙",45));
-        foods.add(new Food("土豆炖牛腩",50));
-        foods.add(new Food("香菇油菜",18));
-        foods.add(new Food("响油泥鳅",45));
-        foods.add(new Food("猪肉炖粉条",40));
+        if(getArguments() != null){
+            foods = (List<Food>)getArguments().getSerializable("FoodList");
+        } else{
+            foods.add(new Food("梨汁肋排",45));
+            foods.add(new Food("麻婆豆腐",20));
+            foods.add(new Food("牛肉炖土豆",50));
+            foods.add(new Food("糯米团子",25));
+            foods.add(new Food("清蒸大闸蟹",80));
+            foods.add(new Food("肉螺炒牛蛙",45));
+            foods.add(new Food("土豆炖牛腩",50));
+            foods.add(new Food("香菇油菜",18));
+            foods.add(new Food("响油泥鳅",45));
+            foods.add(new Food("猪肉炖粉条",40));
+        }
 
         FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext,foods,onClickListener);
         lv_hotDishes.setAdapter(foodListViewAdapter);
@@ -87,19 +110,17 @@ public class HotDishesFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Button btn = (Button) v;
+            int pos = (Integer) btn.getTag();
             if("点菜".equals(btn.getText().toString())){
-                int pos = (Integer) btn.getTag();
-
-                String fName = foods.get(pos).getName();
-                String fPrice = Float.toString(foods.get(pos).getPrice());
-
-                Toast.makeText(mContext,"点菜成功",Toast.LENGTH_SHORT).show();
-                btn.setText("已点");
-
                 // 通过调用接口，将food实例传递给activity。再由activity添加进菜单列表中。
-                interface_addOrderItem.addOrderItem(foods.get(pos));//调用接口
+                interface_handleOrderItem.addOrderItem(foods.get(pos));//调用接口
+                Toast.makeText(mContext,"点菜成功",Toast.LENGTH_SHORT).show();
+                btn.setText("退点");
             }else{
-                Toast.makeText(mContext,"已经点菜",Toast.LENGTH_SHORT).show();
+                // 通过调用接口，将food实例传递给activity。再由activity添加进菜单列表中。
+                interface_handleOrderItem.removeOrderItem(foods.get(pos));//调用接口
+                Toast.makeText(mContext,"退订成功",Toast.LENGTH_SHORT).show();
+                btn.setText("点菜");
             }
         }
     };
