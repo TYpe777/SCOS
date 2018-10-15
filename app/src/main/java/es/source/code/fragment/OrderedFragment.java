@@ -22,6 +22,7 @@ import java.util.List;
 import es.source.code.Interface.Interface_Pay;
 import es.source.code.activity.R;
 import es.source.code.adapters.OrderedListViewAdapter;
+import es.source.code.model.Food;
 import es.source.code.model.OrderItem;
 
 /**
@@ -85,8 +86,16 @@ public class OrderedFragment extends Fragment implements OnClickListener{
 
         orderList = new ArrayList<OrderItem>();
 
-        if(getArguments() != null){
-            orderList = (List<OrderItem>) getArguments().getSerializable("OrderList");
+//        if(getArguments() != null){
+//            orderList = (List<OrderItem>) getArguments().getSerializable("OrderList");
+//        }else
+        {
+            orderList.add(new OrderItem(new Food(R.drawable.ribbed_row_of_pear_juice, "梨汁肋排", 45,"梨:活血化瘀；酱油:活血化瘀" )));
+            orderList.add(new OrderItem(new Food(R.drawable.mapo_tofu, "麻婆豆腐", 20,"四川特色")));
+            orderList.add(new OrderItem(new Food(R.drawable.braised_beef_with_potatoes, "牛肉炖土豆", 50,"家常菜")));
+            orderList.add(new OrderItem(new Food("糯米团子",25)));
+            orderList.add(new OrderItem(new Food("清蒸大闸蟹",80)));
+            orderList.add(new OrderItem(new Food("肉螺炒牛蛙",45)));
         }
 
         OrderedListViewAdapter orderedListViewAdapter = new OrderedListViewAdapter(mContext,orderList);

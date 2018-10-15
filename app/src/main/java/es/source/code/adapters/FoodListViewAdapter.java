@@ -51,25 +51,21 @@ public class FoodListViewAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if(convertView == null){
             convertView = inflater.inflate(R.layout.food_view_listview_item,null);
-
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) convertView.findViewById(R.id.tv_foodview_name);
             viewHolder.price = (TextView) convertView.findViewById(R.id.tv_foodview_price);
             viewHolder.btn = (Button) convertView.findViewById(R.id.btn_foodview_order);
-
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Food food = foods.get(position);
-
         if(food != null){
             viewHolder.name.setText(food.getName());
             viewHolder.price.setText(Float.toString(food.getPrice()));
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this.mOnClickListener);
         }
-
         return convertView;
     }
 

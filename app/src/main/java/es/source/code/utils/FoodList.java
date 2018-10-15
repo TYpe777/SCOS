@@ -3,6 +3,7 @@ package es.source.code.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.source.code.activity.R;
 import es.source.code.model.Food;
 
 /**
@@ -12,16 +13,17 @@ import es.source.code.model.Food;
  * @description 菜单。在FoodView中使用
  */
 public class FoodList {
-    private  List<Food> HotDishes;
-    private  List<Food> ColdDishes;
-    private  List<Food> Seafood;
-    private  List<Food> Drinks;
+    private  List<Food> HotDishes; // 热菜菜单
+    private  List<Food> ColdDishes; // 冷菜菜单
+    private  List<Food> Seafood; // 海鲜菜单
+    private  List<Food> Drinks; // 酒水菜单
 
+    // 构造方法，初始化各个菜单
     public FoodList(){
         HotDishes = new ArrayList<Food>();
-        HotDishes.add(new Food("梨汁肋排",45));
-        HotDishes.add(new Food("麻婆豆腐",20));
-        HotDishes.add(new Food("牛肉炖土豆",50));
+        HotDishes.add(new Food(R.drawable.ribbed_row_of_pear_juice, "梨汁肋排", 45,"梨:活血化瘀；酱油:活血化瘀" ));
+        HotDishes.add(new Food(R.drawable.mapo_tofu, "麻婆豆腐", 20,"四川特色"));
+        HotDishes.add(new Food(R.drawable.braised_beef_with_potatoes, "牛肉炖土豆", 50,"家常菜"));
         HotDishes.add(new Food("糯米团子",25));
         HotDishes.add(new Food("清蒸大闸蟹",80));
         HotDishes.add(new Food("肉螺炒牛蛙",45));

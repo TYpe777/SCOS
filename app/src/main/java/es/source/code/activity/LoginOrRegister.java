@@ -1,7 +1,9 @@
 package es.source.code.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -25,39 +27,52 @@ import es.source.code.utils.Const;
 
 public class LoginOrRegister extends AppCompatActivity implements OnClickListener {
 
-    private Button btn_login,btn_quit,btn_register;
-    private EditText et_uid,et_pwd;
-    private ProgressDialog pd_load;
+    private Context mContext; // 上下文
     private Intent intent;
+    private Button btn_loginorregister,btn_quit;
+    private EditText et_uid,et_pwd;
+    private ProgressDialog pd_load; // ProgressDialog对象
+    private SharedPreferences sp; //  SharedPreference对象
+    private SharedPreferences.Editor editor; // SharedPreference.Editor对象
 
     private Boolean isVaildUid = false; // 标记uid输入是否合法
     private Boolean isVaildPwd = false; // 标记pwd输入是否合法
-    private User loginUser = null;
+    private User loginUser = null; // 登录或注册成功后创建的User实例
+
     private String name,password;
     private boolean oldUser;
 
     @Override
     protected void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
-        setContentView(R.layout.loginorregister_acti);
+        setContentView(R.layout.loginorregister);
+        mContext = this;
 
-        init();
+        initViews();
     }
 
     /**
      * Author; taoye
      * Description: 初始化控件
      */
-    private void init(){
-        btn_login = (Button) findViewById(R.id.btn_login);
+    private void initViews(){
+        btn_loginorregister = (Button) findViewById(R.id.btn_login_loginorregister);
         btn_quit = (Button) findViewById(R.id.btn_login_quit);
-        btn_register = (Button) findViewById(R.id.btn_login_register);
-        btn_login.setOnClickListener(this);
-        btn_quit.setOnClickListener(this);
-        btn_register.setOnClickListener(this);
-
         et_uid = (EditText) findViewById(R.id.et_uid);
         et_pwd = (EditText) findViewById(R.id.et_pwd);
+
+        sp = getSharedPreferences("User",Context.MODE_PRIVATE); // 初始化SharedPreference对象，私有模式
+        editor = sp.edit(); // 获取Editor对象
+        name = sp.getString("userName","#norecord");
+        if(!"#norecord".equals(name)){
+            btn_loginorregister.setText(getString(R.string.login_login)); // 判断SharedPreference中是否有userName的记录，若有则显示“登录”，否则显示“注册”
+            et_uid.setText(name); // 将保存的userName显示在et_uid上
+            isVaildUid = true; // 设置用户名格式为合法
+            et_pwd.requestFocus(); // 初始光标在密码输入栏
+        }
+
+        btn_loginorregister.setOnClickListener(this);
+        btn_quit.setOnClickListener(this);
         et_uid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -127,19 +142,36 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
     @Override
     public void onClick(View view){
         switch(view.getId()){
-            case R.id.btn_login:
-                loadProgressDialog("login");
+            case R.id.btn_login_loginorregister: // 登录/注册
+                // 如果按钮上显示的是“登录”
+                if(getString(R.string.login_login).equals(btn_loginorregister.getText().toString())){
+                    loadProgressDialog("login");
+                }else{
+                    loadProgressDialog("register"); // 如果按钮上显示的是“注册”
+                }
                 break;
-            case R.id.btn_login_register:
-                loadProgressDialog("register");
-                break;
-            case R.id.btn_login_quit:
-                intent = new Intent("scos.intent.action.SCOSMAIN");
+            case R.id.btn_login_quit: // 退出
+                if(!"#norecord".equals(name)){ // 判断是否有userName记录
+                    editor.putInt("loginState",0);
+                    editor.commit();
+                }
+                intent = new Intent();
                 intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.MSG_RETURN);
-                setResult(Const.RespondCode.FROM_LOGINORREGISTER , intent);
+                setResult(Const.ResultCode.FROM_LOGINORREGISTER , intent);
+
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        intent = new Intent();// setResult方法中携带的intent对象可以不使用显示Intent或则隐式Intent
+//        intent = new Intent(mContext,MainScreen.class);
+//        intent = new Intent("scos.intent.action.SCOSMAIN");
+        intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.MSG_RETURN);
+        setResult(Const.ResultCode.FROM_LOGINORREGISTER , intent);
+        finish();
     }
 
     /**
@@ -165,10 +197,16 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                             oldUser = true;
                             loginUser = new User(name,password,oldUser);
 
-                            intent = new Intent("scos.intent.action.SCOSMAIN");
+                            editor.putString("userName",name); // 通过Editor对象将userName写入SharedPrefrence
+                            editor.putInt("loginState",1);
+                            editor.commit(); // 将数据保存到xml文件中
+
+                            intent = new Intent();
+                            // 返回“登录成功”的信息给MainScreen
                             intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_LOGIN_SUCC);
+                            // 返回一个User类实例loginUser
                             intent.putExtra(Const.IntentMsg.USER, loginUser);
-                            setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
+                            setResult(Const.ResultCode.FROM_LOGINORREGISTER ,intent);
                             finish();
 
                             Looper.prepare();
@@ -200,10 +238,16 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                             oldUser = false;
                             loginUser = new User(name,password,oldUser);
 
-                            intent = new Intent("scos.intent.action.SCOSMAIN");
+                            editor.putString("userName",name); // 通过Editor对象将userName写入SharedPrefrence
+                            editor.putInt("loginState",1);
+                            editor.commit(); // 将数据保存到xml文件中
+
+                            intent = new Intent();
+                            // 返回“注册成功”的信息给MainScreen
                             intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_REGISTER_SUCC);
+                            // 返回一个User类实例loginUser
                             intent.putExtra(Const.IntentMsg.USER, loginUser);
-                            setResult(Const.RespondCode.FROM_LOGINORREGISTER ,intent);
+                            setResult(Const.ResultCode.FROM_LOGINORREGISTER ,intent);
                             finish();
 
                             Looper.prepare();

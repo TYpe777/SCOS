@@ -1,7 +1,5 @@
 package es.source.code.model;
 
-import android.graphics.drawable.Drawable;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,7 +10,7 @@ import java.util.List;
  * @description 食物类
  */
 public class Food implements Serializable{
-    private Drawable image; // 食物的图片
+    private int image; // 食物的图片路径
     private String name; // 食物的名称
     private float price; // 食物的价格
     private String description; // 食物的描述
@@ -22,17 +20,18 @@ public class Food implements Serializable{
     public Food(String name,float price){
         this.name = name;
         this.price = price;
-        this.description = null;
-        this.image = null;
+        description = null;
+        image = 0;
     }
 
     public Food(String name,float price,String description){
         this.name = name;
         this.price = price;
         this.description = description;
+        image = 0;
     }
 
-    public Food(Drawable image,String name,float price,String description){
+    public Food(int image,String name,float price,String description){
         this.image = image;
         this.name = name;
         this.price = price;
@@ -40,7 +39,7 @@ public class Food implements Serializable{
     }
 
 
-    public Drawable getImage(){
+    public int getImage(){
         return image;
     }
 
@@ -56,7 +55,7 @@ public class Food implements Serializable{
         return description;
     }
 
-    public void setImage(Drawable image){
+    public void setImage(int image){
         this.image = image;
     }
 

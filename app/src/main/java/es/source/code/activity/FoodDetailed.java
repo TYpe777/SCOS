@@ -41,7 +41,7 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
     private EditText et_description;
     private ImageView iv_image;
 
-    private GestureDetector gestureDetector; // 手势监听实例
+    private GestureDetector gestureDetector; // 手势监听器实例
     private static final int FLING_MIN_DISTANCE = 50;   //最小距离
     private static final int FLING_MIN_VELOCITY = 20;  //最小速度
 
@@ -84,24 +84,24 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
     private void initEvents(){
         GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
             public boolean onFling(MotionEvent e1,MotionEvent e2,float velocityX,float velocityY){
-                float x1 = e1.getX() -  e2.getX();
+                float x1 = e1.getX() - e2.getX();
                 float x2 = e2.getX() - e1.getX();
                 // 向左滑
                 if(x1 > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY){
-                    if((indexInFoodList+1)==foodList.size()){
+                    if((indexInFoodList + 1) == foodList.size()){// 判断是否是菜单列表的最后一道菜
                         Toast.makeText(mContext,"已经是最后一个菜了",Toast.LENGTH_SHORT).show();
                     }else{
-                        indexInFoodList ++;
-                        showFood(indexInFoodList);
+                        indexInFoodList ++; // 菜品下标
+                        showFood(indexInFoodList); // 根据下标获取菜品信息，并显示在界面上
                     }
                 }
                 // 向右滑
                 else if(x2 > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY){
-                    if(indexInFoodList == 0){
+                    if(indexInFoodList == 0){ // 判断是否是菜单列表的第一道菜
                         Toast.makeText(mContext,"已经是第一个菜了",Toast.LENGTH_SHORT).show();
                     }else{
-                        indexInFoodList--;
-                        showFood(indexInFoodList);
+                        indexInFoodList --; // 菜品下标
+                        showFood(indexInFoodList); // 根据下标获取菜品信息，并显示在界面上
                     }
                 }
                 return false;
@@ -120,10 +120,10 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
      */
     private void showFood(int i){
         if(foodList != null){
-            if(foodList.get(i).getImage() != null) {
-                iv_image.setImageDrawable(foodList.get(i).getImage());
+            if(foodList.get(i).getImage() != 0) {
+                iv_image.setImageResource(foodList.get(i).getImage());
             } else {
-                iv_image.setImageDrawable(getResources().getDrawable(R.drawable.ribbed_row_of_pear_juice));
+                iv_image.setImageResource(R.drawable.ribbed_row_of_pear_juice);
             }
             tv_name.setText(foodList.get(i).getName());
             tv_price.setText(Float.toString(foodList.get(i).getPrice()));
@@ -147,5 +147,14 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
     @Override
     public boolean onTouch(View view,MotionEvent event){
         return gestureDetector.onTouchEvent(event);
+    }
+
+    // 点击手机上的退出键相应事件
+    @Override
+    public void onBackPressed(){
+        intent = new Intent();
+        intent.putExtra(Const.IntentMsg.USER,loginUser);
+        setResult(Const.ResultCode.FROM_FOODDETAILED, intent);
+        finish();
     }
 }

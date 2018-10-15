@@ -3,14 +3,15 @@ package es.source.code.model;
 import java.io.Serializable;
 
 /**
- * @description 订单的一条记录
- * Created by taoye on 2018/10/4.
+ * @author taoye
+ * @date 2018/10/4
+ * @classname OrderItem.java
+ * @description 订单列表的一条记录
  */
 public class OrderItem implements Serializable{
-
-    private Food food;
-    private boolean isOrdered;
-    private int count;
+    private Food food; // 订单项对应的菜品
+    private boolean isOrdered; // 是否下单
+    private int count; // 已点该种菜品数量
 
     public OrderItem(){}
 

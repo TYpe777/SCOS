@@ -108,4 +108,13 @@ public class FoodOrderView extends AppCompatActivity implements Interface_Pay{
             }
         }
     }
+
+    // 点击手机上的退出键相应事件
+    @Override
+    public void onBackPressed(){
+        intent = new Intent();
+        intent.putExtra(Const.IntentMsg.USER,loginUser);
+        setResult(Const.ResultCode.FROM_FOODORDERVIEW,intent);
+        finish();
+    }
 }

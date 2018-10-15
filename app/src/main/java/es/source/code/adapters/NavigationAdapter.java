@@ -15,6 +15,7 @@ import es.source.code.activity.R;
  * @date 2018/10/2
  * @classname NavigationAdapter
  * @description MainScreen界面的GridView适配器
+ *               在SCOSHelper中复用此适配器
  */
 public class NavigationAdapter extends BaseAdapter {
     private int[] images;

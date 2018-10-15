@@ -62,22 +62,21 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         inflater.inflate(R.menu.menu_foodview, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     // ActionBar上的按钮点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_ordered: // 已点菜品
                 intent = new Intent(FoodView.this,FoodOrderView.class);
-                intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_UNORDERED); // 设置FoodOrderView的初始默认页。对应“未下单菜”
-//                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+                // 设置FoodOrderView的初始默认页。对应“未下单菜”
+                intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_UNORDERED);
                 intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent, Const.RequestCode.FOODVIEW_ORDERED);
                 return true;
             case R.id.menu_vieworders: // 查看订单
                 intent = new Intent(FoodView.this,FoodOrderView.class);
-                intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_ORDERED); // 设置FoodOrderView的初始默认页。对应“已下单菜”
-//                intent.putExtra("OrderList",(Serializable) orderList); // 传递订单给FoodOrderView
+                // 设置FoodOrderView的初始默认页。对应“已下单菜”
+                intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_ORDERED);
                 intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent,Const.RequestCode.FOODVIEW_VIEWORDER);
                 return true;
@@ -91,7 +90,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                             s += ";";
                         }
                     }
-                    Toast.makeText(mContext,"已点了"+s,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "已点了" + s, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
@@ -101,7 +100,8 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
 
     /**
      * @author taoye
-     * @description 实现接口类Interface_HandleOrderItem。通过addOrderItem方法接受Fragment中传递来的Food对象，创建订单项添加到订单列表中
+     * @description 实现接口类Interface_HandleOrderItem。
+     *                通过addOrderItem方法接受Fragment中传递来的Food对象，创建订单项添加到订单列表中
      * @param food
      */
     @Override
@@ -134,6 +134,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
     @Override
     public void showFoodDetailed(String foodType,int index){
         intent = new Intent(mContext,FoodDetailed.class);
+        // 传递对应的菜单列表
         if("HotDishes".equals(foodType)){
             intent.putExtra("FoodList",(Serializable)foodList.getHotDishes());
         } else if("ColdDishes".equals(foodType)){
@@ -143,10 +144,11 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         }else {
             intent.putExtra("FoodList",(Serializable)foodList.getSeafood());
         }
-//        intent.putExtra("OrderList",(Serializable)orderList);
+        // 传递当前的用户loginUser
         intent.putExtra(Const.IntentMsg.USER,loginUser);
+        // 传递点击菜品在菜单列表中的下标
         intent.putExtra("Index",index);
-        startActivityForResult(intent,10);
+        startActivityForResult(intent,Const.RequestCode.FOODVIEW_FOODDETAILED);
     }
 
     /**
@@ -164,17 +166,18 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         vp_foodView = (ViewPager) findViewById(R.id.vp_foodView);
 
         FoodViewPagerAdapter foodViewPagerAdapter = new FoodViewPagerAdapter(getSupportFragmentManager(),mTitles);
-
+        // 添加Fragment实例，并传递菜单列表
         foodViewPagerAdapter.add(HotDishesFragment.newInstance(foodList.getHotDishes()));
         foodViewPagerAdapter.add(ColdDishesFragment.newInstance(foodList.getColdDishes()));
         foodViewPagerAdapter.add(SeafoodFragment.newInstance(foodList.getSeafood()));
         foodViewPagerAdapter.add(DrinksFragment.newInstance(foodList.getDrinks()));
-
+        // 为ViewPager设置适配器
         vp_foodView.setAdapter(foodViewPagerAdapter);
-
+        // 设置预加载的页数，越少越好
         vp_foodView.setOffscreenPageLimit(2);
         // Tablayout绑定Viewpager
         tl_foodView.setupWithViewPager(vp_foodView);
+
 
         tl_foodView.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.ic_hotdishes_selected));
         tl_foodView.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.ic_colddishes_unselected));
@@ -187,7 +190,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
      * @description 初始化事件
      */
     private void initEvents() {
-        // 添加这个tab选择事件只是为了切换图片。不添加也可以实现页面的滑动和tab的切换，但图片不换变化
+        // 添加这个tab选择监听事件只是为了切换图片。不添加也可以实现页面的滑动和tab的切换，但图片不会变化
         tl_foodView.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -223,6 +226,40 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent intent){
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch(resultCode){
+            case Const.ResultCode.FROM_FOODORDERVIEW:
+                intent = getIntent();
+                if(intent.getSerializableExtra(Const.IntentMsg.USER) != null){
+                    User user = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
+                    loginUser.setOrderList(user.getOrderList());
+                    // 测试，更新ViewPager
+                    {
+
+                    }
+                }
+                break;
+            case Const.ResultCode.FROM_FOODDETAILED:
+                intent = getIntent();
+                if(intent.getSerializableExtra(Const.IntentMsg.USER) != null){
+                    User user = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
+                    loginUser.setOrderList(user.getOrderList());
+                }
+                break;
+        }
+    }
+
+    // 点击手机上的退出键相应事件
+    @Override
+    public void onBackPressed(){
+        intent = new Intent();
+        intent.putExtra(Const.IntentMsg.USER,loginUser);
+        setResult(Const.ResultCode.FROM_FOODVIEW, intent);
+        finish();
     }
 }
 

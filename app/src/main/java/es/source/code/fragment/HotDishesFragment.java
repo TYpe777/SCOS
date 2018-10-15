@@ -88,12 +88,15 @@ public class HotDishesFragment extends Fragment {
             foods = (List<Food>)getArguments().getSerializable("FoodList");
         }
 
+        // 创建自定义适配器的实例
         FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext,foods,onClickListener);
+        // 为ListView控件设置适配器
         lv_hotDishes.setAdapter(foodListViewAdapter);
 
         lv_hotDishes.setOnItemClickListener(new OnItemClickHandler());
     }
 
+    // ListView的Item点击监听事件
     private class OnItemClickHandler implements AdapterView.OnItemClickListener{
 
         @Override
@@ -102,7 +105,7 @@ public class HotDishesFragment extends Fragment {
             interface_showFoodDetailed.showFoodDetailed("HotDishes",position); // 调用接口
         }
     }
-
+    // ListView每一个Item中的Button点击监听器的实例
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
