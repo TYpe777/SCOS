@@ -24,7 +24,7 @@
         android:layout_toEndOf="@+id/iv_fooddetailed_image"
         android:layout_marginStart="50dp"
         android:gravity="center"
-        android:text="菜名:口水鸡"
+        android:text="@string/fooddetailed_name"
         android:textSize="25sp"/>
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_toEndOf="@+id/iv_fooddetailed_image"
         android:layout_marginStart="50dp"
         android:gravity="center"
-        android:text="价格:40.0元"
+        android:text="@string/fooddetailed_price"
         android:textSize="25sp"/>
 
     <EditText
@@ -52,7 +52,7 @@
         android:minLines="8"
         android:maxLines="10"
         android:scrollbars="vertical"
-        android:hint="菜品备注"
+        android:hint="@string/fooddetailed_description"
         android:background="@drawable/food_detailed_et_style"/>
 
     <Button
@@ -63,7 +63,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="点菜"
+        android:text="@string/order"
         android:textColor="@drawable/main_txt_style"
         android:background="@drawable/main_btn_style"/>
 

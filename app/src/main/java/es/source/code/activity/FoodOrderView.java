@@ -1,8 +1,11 @@
 package es.source.code.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -56,9 +59,7 @@ public class FoodOrderView extends AppCompatActivity implements Interface_Pay{
      */
     @Override
     public void pay(){
-        if(loginUser != null && loginUser.isOldUser()){
-            Toast.makeText(mContext,"您好，老 顾客，本次你可享受 7 折优惠",Toast.LENGTH_SHORT).show();
-        }
+        new PayAsyncTask().execute();
     }
 
     private void initViews(){
@@ -114,7 +115,45 @@ public class FoodOrderView extends AppCompatActivity implements Interface_Pay{
     public void onBackPressed(){
         intent = new Intent();
         intent.putExtra(Const.IntentMsg.USER,loginUser);
-        setResult(Const.ResultCode.FROM_FOODORDERVIEW,intent);
+        setResult(Const.ResultCode.FROM_FOODORDERVIEW, intent);
         finish();
+    }
+
+    class PayAsyncTask extends AsyncTask<String,Integer,Void>{
+        private ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(FoodOrderView.this);
+//            progressDialog.setProgressStyle(progressDialog.STYLE_SPINNER); // 圆形旋转进度条
+            progressDialog.setProgressStyle(progressDialog.STYLE_HORIZONTAL); // 水平进度条
+            progressDialog.setMax(6);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... strings){
+//            SystemClock.sleep(6000); // 搭配圆形旋转进度条
+            for(int i= -1; i<6;i++){
+                publishProgress(i+1);
+                SystemClock.sleep(1000);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values){
+            super.onProgressUpdate(values);
+            progressDialog.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+            super.onPostExecute(aVoid);
+            if(loginUser != null && loginUser.isOldUser()){
+                Toast.makeText(mContext, "您好，老 顾客，本次你可享受 7 折优惠", Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        }
     }
 }

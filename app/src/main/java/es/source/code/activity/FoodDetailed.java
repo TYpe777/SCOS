@@ -125,13 +125,13 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
             } else {
                 iv_image.setImageResource(R.drawable.ribbed_row_of_pear_juice);
             }
-            tv_name.setText(foodList.get(i).getName());
-            tv_price.setText(Float.toString(foodList.get(i).getPrice()));
+            tv_name.setText(R.string.fooddetailed_name + foodList.get(i).getName());
+            tv_price.setText(R.string.fooddetailed_price + Float.toString(foodList.get(i).getPrice()));
             et_description.setText(foodList.get(i).getDescription());
             if(!foodList.get(i).inOrderList(orderList)){ // 菜品不在订单中，应该显示“点菜”
-                btn_order.setText("点菜");
+                btn_order.setText(R.string.order);
             }else{ // 菜品在订单中，应该显示“退点”
-                btn_order.setText("退点");
+                btn_order.setText(R.string.unorder);
             }
         }
     }

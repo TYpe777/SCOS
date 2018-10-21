@@ -5,6 +5,13 @@
     <permission android:name="scos.permission.ACCESSCOS"
         android:protectionLevel="dangerous"/>
 
+    <!--申请打电话的权限，搭配动态申请权限一起使用-->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <!--申请发送短信的权限-->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <!--申请访问网络的权限，发送邮件时需要访问网络-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -53,6 +60,10 @@
         </activity>
         <activity
             android:name=".SCOSHelper"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".SendMail"
             android:label="@string/app_name">
         </activity>
     </application>
