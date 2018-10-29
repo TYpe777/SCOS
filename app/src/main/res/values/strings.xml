@@ -29,4 +29,11 @@
     <string name="mail_subject">主题</string>
     <string name="mail_content">内容</string>
     <string name="mail_sendmail">发送</string>
+
+    <!--FoodView界面的ActionBar上菜单项的Title-->
+    <string name="foodview_menu_update">开启实时更新</string>
+    <string name="foodview_menu_stop">关闭实时更新</string>
+    <string name="foodview_menu_ordered">已点菜品</string>
+    <string name="foodview_menu_viewOrders">查看订单</string>
+    <string name="foodview_menu_help">呼叫帮助</string>
 </resources>

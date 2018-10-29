@@ -66,5 +66,8 @@
             android:name=".SendMail"
             android:label="@string/app_name">
         </activity>
+
+        <service android:name="es.source.code.service.ServerObserverService"
+            android:process=":remote"/>
     </application>
 </manifest>

@@ -40,7 +40,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
+
+    // 导入邮件相关的第三方jar包
     compile files('libs/activation.jar')
     compile files('libs/additionnal.jar')
     compile files('libs/mail.jar')
+
+    // 导入GSON对应的库文件
+    compile 'com.google.code.gson:gson:2.8.0'
 }

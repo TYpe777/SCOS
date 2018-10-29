@@ -71,7 +71,7 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
         intent = getIntent();
         indexInFoodList = intent.getIntExtra("Index", 0);
         foodList = new ArrayList<Food>();
-        foodList = (List<Food>)intent.getSerializableExtra("FoodList");
+        foodList = (List<Food>)intent.getSerializableExtra(Const.IntentMsg.FOODLIST);
         loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
         orderList = loginUser.getOrderList();
 //        orderList = new ArrayList<OrderItem>();
@@ -123,10 +123,10 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
             if(foodList.get(i).getImage() != 0) {
                 iv_image.setImageResource(foodList.get(i).getImage());
             } else {
-                iv_image.setImageResource(R.drawable.ribbed_row_of_pear_juice);
+                iv_image.setImageResource(R.drawable.hotdishes_lzlp);
             }
-            tv_name.setText(R.string.fooddetailed_name + foodList.get(i).getName());
-            tv_price.setText(R.string.fooddetailed_price + Float.toString(foodList.get(i).getPrice()));
+            tv_name.setText(getResources().getString(R.string.fooddetailed_name) + foodList.get(i).getName());
+            tv_price.setText(getResources().getString(R.string.fooddetailed_price) + Float.toString(foodList.get(i).getPrice()));
             et_description.setText(foodList.get(i).getDescription());
             if(!foodList.get(i).inOrderList(orderList)){ // 菜品不在订单中，应该显示“点菜”
                 btn_order.setText(R.string.order);

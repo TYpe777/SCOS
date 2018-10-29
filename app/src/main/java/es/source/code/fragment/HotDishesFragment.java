@@ -23,6 +23,7 @@ import es.source.code.Interface.Interface_ShowFoodDetailed;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
+import es.source.code.utils.Const;
 
 /**
  * @author taoye
@@ -58,7 +59,7 @@ public class HotDishesFragment extends Fragment {
     public static HotDishesFragment newInstance(List<Food> foodList){
         HotDishesFragment hotDishesFragment = new HotDishesFragment();
         Bundle bundle_foodlist = new Bundle();
-        bundle_foodlist.putSerializable("FoodList",(Serializable) foodList);
+        bundle_foodlist.putSerializable(Const.IntentMsg.FOODLIST,(Serializable) foodList);
         hotDishesFragment.setArguments(bundle_foodlist);
         return hotDishesFragment;
     }
@@ -85,7 +86,7 @@ public class HotDishesFragment extends Fragment {
         foods = new ArrayList<Food>();
 
         if(getArguments() != null){
-            foods = (List<Food>)getArguments().getSerializable("FoodList");
+            foods = (List<Food>)getArguments().getSerializable(Const.IntentMsg.FOODLIST);
         }
 
         // 创建自定义适配器的实例

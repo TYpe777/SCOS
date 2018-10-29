@@ -90,9 +90,9 @@ public class OrderedFragment extends Fragment implements OnClickListener{
 //            orderList = (List<OrderItem>) getArguments().getSerializable("OrderList");
 //        }else
         {
-            orderList.add(new OrderItem(new Food(R.drawable.ribbed_row_of_pear_juice, "梨汁肋排", 45,"梨:活血化瘀；酱油:活血化瘀" )));
-            orderList.add(new OrderItem(new Food(R.drawable.mapo_tofu, "麻婆豆腐", 20,"四川特色")));
-            orderList.add(new OrderItem(new Food(R.drawable.braised_beef_with_potatoes, "牛肉炖土豆", 50,"家常菜")));
+            orderList.add(new OrderItem(new Food(R.drawable.hotdishes_lzlp, "梨汁肋排", 45,"梨:活血化瘀；酱油:活血化瘀" )));
+            orderList.add(new OrderItem(new Food(R.drawable.hotdishes_mpdf, "麻婆豆腐", 20,"四川特色")));
+            orderList.add(new OrderItem(new Food(R.drawable.hotdishes_nrdtd, "牛肉炖土豆", 50,"家常菜")));
             orderList.add(new OrderItem(new Food("糯米团子",25)));
             orderList.add(new OrderItem(new Food("清蒸大闸蟹",80)));
             orderList.add(new OrderItem(new Food("肉螺炒牛蛙",45)));

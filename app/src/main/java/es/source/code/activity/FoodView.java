@@ -1,17 +1,25 @@
 package es.source.code.activity;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import es.source.code.Interface.Interface_HandleOrderItem;
@@ -24,8 +32,12 @@ import es.source.code.fragment.SeafoodFragment;
 import es.source.code.model.Food;
 import es.source.code.model.OrderItem;
 import es.source.code.model.User;
+import es.source.code.service.ServerObserverService;
+import es.source.code.utils.ColddishesProvider;
 import es.source.code.utils.Const;
-import es.source.code.utils.FoodList;
+import es.source.code.utils.DrinksProvider;
+import es.source.code.utils.HotdishesProvider;
+import es.source.code.utils.SeafoodProvider;
 
 /**
  * @author taoye
@@ -34,17 +46,42 @@ import es.source.code.utils.FoodList;
  * @descripition 食物展示。包含“热菜”、“冷菜”、“海鲜”和“酒水”
  */
 public class FoodView extends AppCompatActivity implements Interface_HandleOrderItem,Interface_ShowFoodDetailed {
-
+    private static final String TAG = "FoodView";
     private Context mContext;// 上下文
     private Intent intent;
     private TabLayout tl_foodView;
     private ViewPager vp_foodView;
 
     private User loginUser; // 当前用户
-    private FoodList foodList; // 菜单列表
+    private List<Food> Hotdishes, Colddishes, Seafood, Drinks; // 用于记录当前的四张菜单
     private List<OrderItem> orderList;//订单列表
 
+    private boolean isBound = false; // 是否与远程服务绑定
+    private MyHandler myHandler = new MyHandler(FoodView.this);
+    private Messenger mMessenger; // 客户端自己的信使
+    private Messenger rMessenger; // 远程服务的信使
+    // 服务连接器,用于记录客户端与远程服务的绑定状态
+    private ServiceConnection serviceConn = new ServiceConnection() {
+        // 绑定成功后回调
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.i(TAG, "绑定服务");
+            rMessenger = new Messenger(service);
+            mMessenger = new Messenger(myHandler);
+            isBound = true;
+        }
+        // 解绑时回调
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i(TAG, "解绑服务");
+            rMessenger = null;
+            isBound = false;
+        }
+    };
+
     private String[] mTitles = {"热菜","冷菜","海鲜","酒水"}; // 四个tab的标题
+    private boolean isStarted = false; // 判断是否开启实时更新
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,31 +93,140 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         initEvents();
     }
 
+
+    /**
+     * 在onStart()方法中绑定服务
+     */
+    @Override
+    protected void onStart(){
+        super.onStart();
+        intent = new Intent(FoodView.this, ServerObserverService.class);
+        bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 在onStop()方法中解绑服务
+     */
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(isBound){
+            unbindService(serviceConn);
+            isBound = false;
+        }
+    }
+
+    /**
+     * 声明一个静态的Handle内部类，并持有外部类的弱引用
+     */
+    private static class MyHandler extends Handler {
+        private final WeakReference<FoodView> mActivity;
+
+        private MyHandler(FoodView mActivity) {
+            this.mActivity = new WeakReference<FoodView>(mActivity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            String s = msg.getData().getString("content");
+            Log.i(TAG, s);
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        myHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * 初始化Menu
+     * onCreateOptionsMenu在Activity的整个周期中只被调用一次
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_foodview, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    // ActionBar上的按钮点击事件
+
+    /**
+     * 在需要更新ActionBar上menu的地方执行inVaildateOptionsMenu()方法,会回调此方法
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        if(!isStarted){
+            menu.findItem(R.id.foodview_menu_update).setVisible(true);
+            menu.findItem(R.id.foodview_menu_ordered).setVisible(true);
+            menu.findItem(R.id.foodview_menu_vieworders).setVisible(true);
+            menu.findItem(R.id.foodview_menu_help).setVisible(true);
+            menu.findItem(R.id.foodview_menu_stop).setVisible(false);
+        }
+        else {
+            menu.findItem(R.id.foodview_menu_stop).setVisible(true);
+            menu.findItem(R.id.foodview_menu_ordered).setVisible(true);
+            menu.findItem(R.id.foodview_menu_vieworders).setVisible(true);
+            menu.findItem(R.id.foodview_menu_help).setVisible(true);
+            menu.findItem(R.id.foodview_menu_update).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * 处理ActionBar上的菜单项点击事件
+      * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.menu_ordered: // 已点菜品
+            case R.id.foodview_menu_update: // 开启实时更新
+                try {
+                    if (!isStarted) {
+                        Message message = Message.obtain();
+                        message.what = 0;
+                        message.replyTo = mMessenger; // 通过message将客户端的信使发送给服务端
+                        rMessenger.send(message); // 利用服务端的信使发送消息,在服务中的Handler中获得这个消息
+
+                        invalidateOptionsMenu(); // 更新menu,将"开启实时更新"换成"关闭实施更新"
+                        isStarted = true;
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.foodview_menu_stop: // 关闭实时更新
+                try{
+                    if(isStarted){
+                        Message message = Message.obtain();
+                        message.what = 1;
+                        message.replyTo = mMessenger;
+                        rMessenger.send(message);
+
+                        invalidateOptionsMenu();
+                        isStarted = false;
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.foodview_menu_ordered: // 已点菜品
                 intent = new Intent(FoodView.this,FoodOrderView.class);
                 // 设置FoodOrderView的初始默认页。对应“未下单菜”
                 intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_UNORDERED);
                 intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent, Const.RequestCode.FOODVIEW_ORDERED);
-                return true;
-            case R.id.menu_vieworders: // 查看订单
+                break;
+            case R.id.foodview_menu_vieworders: // 查看订单
                 intent = new Intent(FoodView.this,FoodOrderView.class);
                 // 设置FoodOrderView的初始默认页。对应“已下单菜”
                 intent.putExtra(Const.IntentMsg.DEFAULTPAGE,Const.IntentMsg.PAGE_ORDERED);
-                intent.putExtra(Const.IntentMsg.USER,loginUser);// 传递用户对象给FoodOrderView
+                intent.putExtra(Const.IntentMsg.USER, loginUser);// 传递用户对象给FoodOrderView
                 startActivityForResult(intent,Const.RequestCode.FOODVIEW_VIEWORDER);
-                return true;
-            case R.id.menu_help: // 系统帮助
+                break;
+            case R.id.foodview_menu_help: // 系统帮助
                 // 测试代码
                 {
                     String s = "";
@@ -92,10 +238,9 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                     }
                     Toast.makeText(mContext, "已点了" + s, Toast.LENGTH_SHORT).show();
                 }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -136,13 +281,13 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         intent = new Intent(mContext,FoodDetailed.class);
         // 传递对应的菜单列表
         if("HotDishes".equals(foodType)){
-            intent.putExtra("FoodList",(Serializable)foodList.getHotDishes());
+            intent.putExtra(Const.IntentMsg.FOODLIST, (Serializable)Hotdishes);
         } else if("ColdDishes".equals(foodType)){
-            intent.putExtra("FoodList",(Serializable)foodList.getColdDishes());
+            intent.putExtra(Const.IntentMsg.FOODLIST, (Serializable)Colddishes);
         }else if("Drinks".equals(foodType)){
-            intent.putExtra("FoodList",(Serializable)foodList.getDrinks());
+            intent.putExtra(Const.IntentMsg.FOODLIST, (Serializable)Drinks);
         }else {
-            intent.putExtra("FoodList",(Serializable)foodList.getSeafood());
+            intent.putExtra(Const.IntentMsg.FOODLIST, (Serializable)Seafood);
         }
         // 传递当前的用户loginUser
         intent.putExtra(Const.IntentMsg.USER,loginUser);
@@ -159,18 +304,24 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         intent = getIntent();
         loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
         orderList = loginUser.getOrderList();
-        foodList = new FoodList();
 //        orderList = new ArrayList<OrderItem>();
 
         tl_foodView = (TabLayout) findViewById(R.id.tl_foodView);
         vp_foodView = (ViewPager) findViewById(R.id.vp_foodView);
 
         FoodViewPagerAdapter foodViewPagerAdapter = new FoodViewPagerAdapter(getSupportFragmentManager(),mTitles);
+
+        // 初始化四张菜单
+        Hotdishes = HotdishesProvider.getList(FoodView.this);
+        Colddishes = ColddishesProvider.getList(FoodView.this);
+        Seafood = SeafoodProvider.getList(FoodView.this);
+        Drinks = DrinksProvider.getList(FoodView.this);
         // 添加Fragment实例，并传递菜单列表
-        foodViewPagerAdapter.add(HotDishesFragment.newInstance(foodList.getHotDishes()));
-        foodViewPagerAdapter.add(ColdDishesFragment.newInstance(foodList.getColdDishes()));
-        foodViewPagerAdapter.add(SeafoodFragment.newInstance(foodList.getSeafood()));
-        foodViewPagerAdapter.add(DrinksFragment.newInstance(foodList.getDrinks()));
+        foodViewPagerAdapter.add(HotDishesFragment.newInstance(Hotdishes));
+        foodViewPagerAdapter.add(ColdDishesFragment.newInstance(Colddishes));
+        foodViewPagerAdapter.add(SeafoodFragment.newInstance(Seafood));
+        foodViewPagerAdapter.add(DrinksFragment.newInstance(Drinks));
+
         // 为ViewPager设置适配器
         vp_foodView.setAdapter(foodViewPagerAdapter);
         // 设置预加载的页数，越少越好

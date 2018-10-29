@@ -16,6 +16,9 @@ public class Const {
         public static final String USER = "User";
         // 标记Intent携带的数据是初始默认页，int类型
         public static final String DEFAULTPAGE = "DefaultPage";
+        // 标记Intent携带的数据是菜单，即List<Food>
+        public static final String FOODLIST = "Foodlist";
+
         // 初始默认页为“未下单菜”
         public static final int PAGE_UNORDERED = 0;
         // 初始默认页为“已下单菜”

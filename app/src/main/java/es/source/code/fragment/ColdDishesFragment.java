@@ -22,6 +22,7 @@ import es.source.code.Interface.Interface_ShowFoodDetailed;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
+import es.source.code.utils.Const;
 
 /**
  * @author taoye
@@ -55,7 +56,7 @@ public class ColdDishesFragment extends Fragment {
     public static ColdDishesFragment newInstance(List<Food> foodList){
         ColdDishesFragment coldDishesFragment = new ColdDishesFragment();
         Bundle bundle_foodlist = new Bundle();
-        bundle_foodlist.putSerializable("FoodList",(Serializable) foodList);
+        bundle_foodlist.putSerializable(Const.IntentMsg.FOODLIST, (Serializable) foodList);
         coldDishesFragment.setArguments(bundle_foodlist);
         return coldDishesFragment;
     }
@@ -79,9 +80,9 @@ public class ColdDishesFragment extends Fragment {
         lv_coldDishes = (ListView) mView.findViewById(R.id.lv_food);
 
         foods = new ArrayList<Food>();
-
+        // 获取FoodView传递给Fragment的菜单
         if(getArguments() != null){
-            foods = (List<Food>)getArguments().getSerializable("FoodList");
+            foods = (List<Food>)getArguments().getSerializable(Const.IntentMsg.FOODLIST);
         }
 
         FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext,foods,onClickListener);

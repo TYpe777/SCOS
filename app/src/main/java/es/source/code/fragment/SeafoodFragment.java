@@ -22,6 +22,7 @@ import es.source.code.Interface.Interface_ShowFoodDetailed;
 import es.source.code.activity.R;
 import es.source.code.adapters.FoodListViewAdapter;
 import es.source.code.model.Food;
+import es.source.code.utils.Const;
 
 /**
  * @author taoye
@@ -55,7 +56,7 @@ public class SeafoodFragment extends Fragment {
     public static SeafoodFragment newInstance(List<Food> foodList){
         SeafoodFragment seafoodFragment = new SeafoodFragment();
         Bundle bundle_foodlist = new Bundle();
-        bundle_foodlist.putSerializable("FoodList",(Serializable) foodList);
+        bundle_foodlist.putSerializable(Const.IntentMsg.FOODLIST,(Serializable) foodList);
         seafoodFragment.setArguments(bundle_foodlist);
         return seafoodFragment;
     }
@@ -81,7 +82,7 @@ public class SeafoodFragment extends Fragment {
         foods = new ArrayList<Food>();
 
         if(getArguments() != null){
-            foods = (List<Food>)getArguments().getSerializable("FoodList");
+            foods = (List<Food>)getArguments().getSerializable(Const.IntentMsg.FOODLIST);
         }
 
         FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext,foods,onClickListener);

@@ -151,7 +151,7 @@ public class FoodOrderView extends AppCompatActivity implements Interface_Pay{
         protected void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
             if(loginUser != null && loginUser.isOldUser()){
-                Toast.makeText(mContext, "您好，老 顾客，本次你可享受 7 折优惠", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "您好，老顾客，本次你可享受 7 折优惠", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();
         }
