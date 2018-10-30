@@ -302,7 +302,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
         // 传递当前的用户loginUser
         intent.putExtra(Const.IntentMsg.USER,loginUser);
         // 传递点击菜品在菜单列表中的下标
-        intent.putExtra("Index",index);
+        intent.putExtra(Const.IntentMsg.INDEX, index);
         startActivityForResult(intent,Const.RequestCode.FOODVIEW_FOODDETAILED);
     }
 

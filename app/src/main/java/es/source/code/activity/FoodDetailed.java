@@ -77,11 +77,23 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
         tp_stock.setFakeBoldText(true);
 
         intent = getIntent();
-        indexInFoodList = intent.getIntExtra("Index", 0);
-        foodList = new ArrayList<Food>();
-        foodList = (List<Food>)intent.getSerializableExtra(Const.IntentMsg.FOODLIST);
-        loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
-        orderList = loginUser.getOrderList();
+        if(intent.getSerializableExtra(Const.IntentMsg.USER) != null){
+            loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
+            orderList = loginUser.getOrderList();
+        } else{ // 通过点击状态栏的菜品更新的通知，跳转到FoodDetailed界面
+            loginUser = null;
+            orderList = new ArrayList<>();
+        }
+
+        if(intent.getSerializableExtra(Const.IntentMsg.FOODLIST) != null){
+            indexInFoodList = intent.getIntExtra(Const.IntentMsg.INDEX, 0);
+            foodList = new ArrayList<>();
+            foodList = (List<Food>)intent.getSerializableExtra(Const.IntentMsg.FOODLIST);
+        } else{ // 通过点击状态栏的菜品更新的通知，跳转到FoodDetailed界面
+            foodList = new ArrayList<>();
+            foodList.add((Food) intent.getSerializableExtra(Const.IntentMsg.FOOD));
+        }
+//        orderList = loginUser.getOrderList();
 //        orderList = new ArrayList<OrderItem>();
 
         showFood(indexInFoodList); // 根据菜品对象更新界面

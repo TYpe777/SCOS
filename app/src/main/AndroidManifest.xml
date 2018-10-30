@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <!--申请访问网络的权限，发送邮件时需要访问网络-->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--接收开机广播，需要申请此权限，而且要和广播接收器组件中intent-filter的action搭配使用-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -69,5 +71,12 @@
 
         <service android:name="es.source.code.service.ServerObserverService"
             android:process=":remote" />
+        <service android:name="es.source.code.service.UpdateService"/>
+
+        <receiver android:name="es.source.code.br.DeviceStartedListener">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

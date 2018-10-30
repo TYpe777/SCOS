@@ -13,7 +13,10 @@ import java.io.Serializable;
 import es.source.code.utils.HotdishesProvider;
 
 /**
- * Created by taoye on 2018/10/24.
+ * @author taoye
+ * @date 2018/10/24.
+ * @classname ServerObserverService.java
+ * @description 实现菜单实时更新的服务
  */
 public class ServerObserverService extends Service {
 

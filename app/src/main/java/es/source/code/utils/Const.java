@@ -18,6 +18,10 @@ public class Const {
         public static final String DEFAULTPAGE = "DefaultPage";
         // 标记Intent携带的数据是菜单，即List<Food>
         public static final String FOODLIST = "Foodlist";
+        // 标记Intent携带的数据是菜单列表的下标，用于菜品详细页，int类型
+        public static final String INDEX = "Index";
+        // 标记Intent携带的数据是菜品，即Food
+        public static final String FOOD = "Food";
 
         // 初始默认页为“未下单菜”
         public static final int PAGE_UNORDERED = 0;
