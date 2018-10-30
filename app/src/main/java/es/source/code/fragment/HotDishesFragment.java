@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,4 +129,27 @@ public class HotDishesFragment extends Fragment {
         }
     };
 
+
+    // 在EventBus上注册
+    @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    // 从EventBus上解除注册
+    @Override
+    public void onStop(){
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    // 接收消息的处理方法
+    @Subscribe
+    public void onReceiverEvent(List<Food> foodList){
+        // 创建自定义适配器的实例
+        FoodListViewAdapter foodListViewAdapter = new FoodListViewAdapter(mContext, foodList, onClickListener);
+        // 为ListView控件设置适配器
+        lv_hotDishes.setAdapter(foodListViewAdapter);
+    }
 }

@@ -68,6 +68,6 @@
         </activity>
 
         <service android:name="es.source.code.service.ServerObserverService"
-            android:process=":remote"/>
+            android:process=":remote" />
     </application>
 </manifest>

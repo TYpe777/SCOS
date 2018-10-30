@@ -18,6 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -105,14 +107,18 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
     }
 
     /**
-     * 在onStop()方法中解绑服务
+     * 在onStop()方法中解绑服务，变换menu
      */
     @Override
     protected void onStop(){
         super.onStop();
-        if(isBound){
-            unbindService(serviceConn);
+        if(isBound){ // 解绑服务
             isBound = false;
+            unbindService(serviceConn);
+        }
+        if(isStarted){ // 如果启动了实时更新
+            isStarted = false; // 将标记变为未开启
+            invalidateOptionsMenu(); // 变换menu
         }
     }
 
@@ -128,8 +134,12 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
 
         @Override
         public void handleMessage(Message msg) {
-            String s = msg.getData().getString("content");
-            Log.i(TAG, s);
+            if(msg.what == 10){
+                Log.i(TAG, "实时传递成功");
+                List<Food> foodList = (List<Food>)msg.getData().getSerializable("Hotdishes");
+                int i = foodList.size();
+                EventBus.getDefault().post(foodList);
+            }
         }
     }
 
@@ -186,7 +196,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                 try {
                     if (!isStarted) {
                         Message message = Message.obtain();
-                        message.what = 0;
+                        message.what = 1;
                         message.replyTo = mMessenger; // 通过message将客户端的信使发送给服务端
                         rMessenger.send(message); // 利用服务端的信使发送消息,在服务中的Handler中获得这个消息
 
@@ -201,7 +211,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                 try{
                     if(isStarted){
                         Message message = Message.obtain();
-                        message.what = 1;
+                        message.what = 0;
                         message.replyTo = mMessenger;
                         rMessenger.send(message);
 
@@ -250,7 +260,7 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
      * @param food
      */
     @Override
-    public void addOrderItem(Food food){
+    public void addOrderItem(Food food) {
         orderList.add(new OrderItem(food));
         loginUser.setOrderList(orderList);// 将订单列表同步到当前的用户对象中
     }

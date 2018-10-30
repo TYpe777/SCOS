@@ -24,7 +24,7 @@ public class FoodListProvider {
     private static final String filename = "foods.json"; // Json文件名
 
     // 从json文件中读取数据，并返回一个包含Food对象的List
-    public static List<Food> getFoodsFromJSON(String listName, Context mContext){
+    protected static List<Food> getFoodsFromJSON(String listName, Context mContext){
         List<Food> foodList = new ArrayList<>();
         Food food;
         try{
@@ -61,5 +61,37 @@ public class FoodListProvider {
     // 将String反序列化为对应的Food对象
     public static Food foodGson(String json){
         return parseJsonWithGson(json, Food.class);
+    }
+
+
+    /**
+     *通过读不同的Json文件模拟服务器
+     * 后期会删除
+     */
+    protected static List<Food> getFoodsFromJSON_simu(String listName, Context mContext){
+        List<Food> foodList = new ArrayList<>();
+        Food food;
+        try{
+            InputStreamReader inputStreamReader = new InputStreamReader(mContext.getAssets().open("simulation.json"));
+            BufferedReader bReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuilder sBuilder = new StringBuilder();
+            while((line = bReader.readLine()) != null){
+                sBuilder.append(line);
+            }
+            bReader.close();
+            inputStreamReader.close();
+
+            JSONObject foodsJson = new JSONObject(sBuilder.toString());
+            JSONArray foodsArray = foodsJson.getJSONArray(listName);
+            for(int i = 0; i<foodsArray.length(); i++){
+                JSONObject foodObject = foodsArray.getJSONObject(i);
+                food = foodGson(foodObject.toString());
+                foodList.add(food);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return foodList;
     }
 }

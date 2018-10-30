@@ -18,4 +18,12 @@ public class HotdishesProvider extends FoodListProvider {
     public static List<Food> getList(Context mContext){
         return getFoodsFromJSON(LISTNAME, mContext);
     }
+
+    /**
+     *通过读不同的Json文件模拟服务器
+     * 后期会删除
+     */
+    public static List<Food> getList_simu(Context context){
+        return getFoodsFromJSON_simu(LISTNAME, context);
+    }
 }

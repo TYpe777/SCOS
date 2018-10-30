@@ -1,0 +1,41 @@
+{
+  "Hotdishes":[
+    {
+      "name":"梨汁肋排",
+      "image":2130837603,
+      "price":45.0,
+      "stock":10,
+      "description":"梨:活血化瘀；酱油:活血化瘀"
+    }
+  ],
+
+  "Colddishes":[
+    {
+      "name":"鹌鹑蛋拌黄瓜",
+      "image":2130837579,
+      "price":23.0,
+      "stock":10,
+      "description":"鹌鹑蛋和黄瓜"
+    }
+  ],
+
+  "Seafood":[
+    {
+      "name":"葱烧海参",
+      "image":2130837618,
+      "price":60.0,
+      "stock":10,
+      "description":"葱和海参"
+    }
+  ],
+
+  "Drinks":[
+    {
+      "name":"白酒",
+      "image":2130837591,
+      "price":100.0,
+      "stock":10,
+      "description":"白色的酒"
+    }
+  ]
+}

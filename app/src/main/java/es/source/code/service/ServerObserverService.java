@@ -8,7 +8,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import java.lang.ref.WeakReference;
+import java.io.Serializable;
+
+import es.source.code.utils.HotdishesProvider;
 
 /**
  * Created by taoye on 2018/10/24.
@@ -17,10 +19,50 @@ public class ServerObserverService extends Service {
 
     // 在主线程直接new Handler 使用的是主线程Looper.如果handler工作频率很高，会影响主线程的效率。
     // 所以某些UI操作 （对，ui操作）使用线程来执行。
-    private MyHandler myHandler = new MyHandler(this);
+    private cMessengerHandler mHandler = new cMessengerHandler();
 
-    private final Messenger mMessenger = new Messenger(myHandler); // 服务自己的信使
-//    private Messenger cMessenger; // 客户端的信使
+    private final Messenger mMessenger = new Messenger(mHandler); // 服务自己的信使
+    private Messenger cMessenger; // 客户端的信使
+
+    private boolean exit = false; // 判断是否退出子线程中的循环
+
+    private Runnable runnable = new Runnable() { // 创建一个线程执行耗时任务
+        @Override
+        public void run() {
+            /**
+             * 值为0 或1
+             * 标记读的是哪一个Json文件中的菜单。0表示foods.json，1表示simulation.json
+             * 每300ms切换一次，以实现模拟实时更新
+             */
+            int fileno  = 1;
+
+            Message message = Message.obtain(); // 要发送的消息对象
+            while(!exit){
+                try{
+                    Bundle bundle = new Bundle();
+
+                    // 这段代码是为了模拟服务器实时更新效果
+                    {
+                        if(fileno == 0){
+                            bundle.putSerializable("Hotdishes", (Serializable) HotdishesProvider.getList(getApplicationContext()));
+                        }
+                        else {
+                            bundle.putSerializable("Hotdishes", (Serializable)HotdishesProvider.getList_simu(getApplicationContext()));
+                        }
+                        fileno = 1 - fileno; // 下一秒钟换一个Json文件读取
+                    }
+
+                    message.what = 10;
+                    message.setData(bundle);
+                    // 使用客户端信使发送消息给客户端，由客户端的Handler对象接收
+                    cMessenger.send(message);
+                    Thread.sleep(1000); // 休眠1s，作业要求休眠300ms
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
     /**
      * 客户端与服务端绑定成功后回调
@@ -63,45 +105,25 @@ public class ServerObserverService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        myHandler.removeCallbacksAndMessages(null); // Service销毁时，清除消息队列中未执行完的任务
+        exit = true; // 退出子线程中的循环
+        mHandler.removeCallbacksAndMessages(null); // Service销毁时，清除消息队列中未执行完的任务
     }
 
-    /**
-     * 声明一个静态的Handle内部类，并持有外部类的弱引用
-     */
-    private static class MyHandler extends Handler{
-        private final WeakReference<ServerObserverService> mService;
-
-        private MyHandler(ServerObserverService mService){
-            this.mService = new WeakReference<ServerObserverService>(mService);
-        }
+    // 自定义Handler
+    private class cMessengerHandler extends Handler{
 
         @Override
         public void handleMessage(Message msg){
             switch(msg.what){
                 case 0:
-                    try{
-                        Message message = Message.obtain();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("content", "实时更新已启动");
-                        message.setData(bundle);
-                        // 通过msg.replyTo域获取客户端的信使对象
-                        // 并使用这只信使发送消息给客户端，由客户端的Handler对象接收
-                        (msg.replyTo).send(message);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
+                    exit = true; // 退出子线程中的循环
                     break;
                 case 1:
-                    try{
-                        Message message = Message.obtain();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("content", "实时更新已关闭");
-                        message.setData(bundle);
-                        (msg.replyTo).send(message);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
+                    exit = false;
+                    cMessenger = msg.replyTo; // 通过msg.replyTo域获取客户端的信使对象
+                    new Thread(runnable).start(); // 开启线程
+                    // 销毁线程
+                    mHandler.removeCallbacks(runnable);
                     break;
                 default:
                     super.handleMessage(msg);
