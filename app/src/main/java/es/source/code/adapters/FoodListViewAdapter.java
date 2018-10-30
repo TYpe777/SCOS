@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -54,6 +55,8 @@ public class FoodListViewAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) convertView.findViewById(R.id.tv_foodview_name);
             viewHolder.price = (TextView) convertView.findViewById(R.id.tv_foodview_price);
+            viewHolder.stock = (TextView) convertView.findViewById(R.id.tv_foodview_stock);
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.iv_foodview_image);
             viewHolder.btn = (Button) convertView.findViewById(R.id.btn_foodview_order);
             convertView.setTag(viewHolder);
         }else {
@@ -63,6 +66,8 @@ public class FoodListViewAdapter extends BaseAdapter {
         if(food != null){
             viewHolder.name.setText(food.getName());
             viewHolder.price.setText(Float.toString(food.getPrice()));
+            viewHolder.stock.setText(Integer.toString(food.getStock()));
+            viewHolder.image.setImageResource(food.getImage());
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this.mOnClickListener);
         }
@@ -70,8 +75,10 @@ public class FoodListViewAdapter extends BaseAdapter {
     }
 
     static class ViewHolder{
-        TextView name;
-        TextView price;
-        Button btn;
+        TextView name; // 菜品名称
+        TextView price; // 菜品价格
+        TextView stock; // 菜品库存
+        ImageView image; // 菜品图片
+        Button btn; // 点菜/退点按钮
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextPaint;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,10 +37,10 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
     private Intent intent;
 
     private RelativeLayout rlayout_fooddetailed; // 布局界面的主布局，用于手势监听
-    private Button btn_order;
-    private TextView tv_name,tv_price;
-    private EditText et_description;
-    private ImageView iv_image;
+    private Button btn_order; // 点菜/退点按钮
+    private TextView tv_name, tv_price, tv_stock; // 名称，价格，库存
+    private EditText et_description; // 菜品备注
+    private ImageView iv_image; // 菜品图片
 
     private GestureDetector gestureDetector; // 手势监听器实例
     private static final int FLING_MIN_DISTANCE = 50;   //最小距离
@@ -65,8 +66,15 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
         iv_image = (ImageView) findViewById(R.id.iv_fooddetailed_image);
         tv_name = (TextView) findViewById(R.id.tv_fooddetailed_name);
         tv_price = (TextView) findViewById(R.id.tv_fooddetailed_price);
+        tv_stock = (TextView) findViewById(R.id.tv_fooddetailed_stock);
         et_description = (EditText) findViewById(R.id.et_fooddetailed_description);
         btn_order = (Button) findViewById(R.id.btn_fooddetailed_order);
+
+        btn_order.setOnClickListener(this);
+
+        // 设置Textview中字体为粗体（主要是针对中文字符）
+        TextPaint tp_stock = tv_stock.getPaint();
+        tp_stock.setFakeBoldText(true);
 
         intent = getIntent();
         indexInFoodList = intent.getIntExtra("Index", 0);
@@ -76,9 +84,7 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
         orderList = loginUser.getOrderList();
 //        orderList = new ArrayList<OrderItem>();
 
-        showFood(indexInFoodList);
-
-        btn_order.setOnClickListener(this);
+        showFood(indexInFoodList); // 根据菜品对象更新界面
     }
 
     private void initEvents(){
@@ -125,8 +131,9 @@ public class FoodDetailed extends AppCompatActivity implements OnClickListener,O
             } else {
                 iv_image.setImageResource(R.drawable.hotdishes_lzlp);
             }
-            tv_name.setText(getResources().getString(R.string.fooddetailed_name) + foodList.get(i).getName());
-            tv_price.setText(getResources().getString(R.string.fooddetailed_price) + Float.toString(foodList.get(i).getPrice()));
+            tv_name.setText(foodList.get(i).getName());
+            tv_price.setText(Float.toString(foodList.get(i).getPrice()) + "元");
+            tv_stock.setText(Integer.toString(foodList.get(i).getStock()) + "盘");
             et_description.setText(foodList.get(i).getDescription());
             if(!foodList.get(i).inOrderList(orderList)){ // 菜品不在订单中，应该显示“点菜”
                 btn_order.setText(R.string.order);

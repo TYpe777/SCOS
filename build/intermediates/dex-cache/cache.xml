@@ -1,3 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="D:\sdk\extras\android\m2repository\com\android\support\support-annotations\23.4.0\support-annotations-23.4.0.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\support-annotations-23.4.0_367486334497ca5efbbf3708b676df1c95b517b9.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\libs\additionnal.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\additionnal_fa84fe54bc35e7f56082c2bfce7303b21d626b35.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\libs\activation.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\activation_de11803d9c4d1869e0beb7d41288ea716427f588.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.4.0_a5aab6d363cebee87476dbd6b55ecbd91d82d878.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\design\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.4.0_92cb73b3ca2dc848f8fb90b70ef568075612b053.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.4.0_660023df15cf2a91418ac8f57602409ac8a06d08.jar" />
+    </item>
+    <item
+        jar="C:\Users\taoye\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.0\c4ba5371a29ac9b2ad6129b1d39ea38750043eff\gson-2.8.0.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="c4ba5371a29ac9b2ad6129b1d39ea38750043eff">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\gson-2.8.0_c52ac1ac08572af66b47e9293abb4e9b4fd79ca8.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.4.0_414d28e10e97a075786609a66e37b2783ab70f25.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.4.0_0ea1a1671b31dfcb27fff632d8f8182bf442a73b.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.4.0_3b55b5e15aab32309563bdb5c30a33bc337a644d.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\libs\internal_impl-23.4.0.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\internal_impl-23.4.0_33173bba02224b1aa3d16e438f58d4f2406f2201.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\libs\eventbus-3.1.1.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="5cd91fd014f5b72292f959748c20a2cefefae77d">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\eventbus-3.1.1_b130352ae78c6efc59005cd2d0f75c9f6892501c.jar" />
+    </item>
+    <item
+        jar="D:\Programs\AndroidStudio-Workspace\SCOS\app\libs\mail.jar"
+        jumboMode="false"
+        revision="28.0.2"
+        sha1="428e267abff0d10802ccde86b915da2c20471160">
+        <dex dex="D:\Programs\AndroidStudio-Workspace\SCOS\app\build\intermediates\pre-dexed\debug\mail_3514f7f4862bf671d18282f7cd83aaf57d781abd.jar" />
+    </item>
+
+</items>

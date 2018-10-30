@@ -5,42 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--指示栏-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:layout_marginStart="10dp"
-            android:text="菜名"
-            android:textSize="20sp"/>
+    <!--&lt;!&ndash;指示栏&ndash;&gt;-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="2"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginStart="10dp"-->
+            <!--android:text="菜名"-->
+            <!--android:textSize="20sp"/>-->
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="价格"
-            android:textSize="20sp"/>
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="价格"-->
+            <!--android:textSize="20sp"/>-->
 
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="点菜"
-            android:textSize="20sp"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:text="点菜"-->
+            <!--android:textSize="20sp"/>-->
+    <!--</LinearLayout>-->
 
-    <!--指示栏与ListView之间的分割线-->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5px"
-        android:background="@color/lv_dividingline"/>
+    <!--&lt;!&ndash;指示栏与ListView之间的分割线&ndash;&gt;-->
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="5px"-->
+        <!--android:background="@color/lv_dividingline"/>-->
 
     <ListView
         android:id="@+id/lv_food"

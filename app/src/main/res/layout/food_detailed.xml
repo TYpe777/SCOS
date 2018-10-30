@@ -8,23 +8,24 @@
 
     <ImageView
         android:id="@+id/iv_fooddetailed_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
-        android:src="@drawable/hotdishes_mpdf"/>
+        android:src="@drawable/food_default"/>
 
     <TextView
         android:id="@+id/tv_fooddetailed_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/iv_fooddetailed_image"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/iv_fooddetailed_image"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="30dp"
         android:gravity="center"
-        android:text="@string/fooddetailed_name"
+        android:text="@string/foodname"
         android:textSize="25sp"/>
 
     <TextView
@@ -32,12 +33,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_fooddetailed_name"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_toEndOf="@+id/iv_fooddetailed_image"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="30dp"
         android:gravity="center"
-        android:text="@string/fooddetailed_price"
-        android:textSize="25sp"/>
+        android:text="@string/foodprice"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tv_fooddetailed_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_fooddetailed_price"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/iv_fooddetailed_image"
+        android:layout_marginStart="30dp"
+        android:gravity="center"
+        android:text="@string/foodstock"
+        android:textColor="@color/blue"
+        android:textSize="20sp"/>
 
     <EditText
         android:id="@+id/et_fooddetailed_description"
@@ -52,7 +66,7 @@
         android:minLines="8"
         android:maxLines="10"
         android:scrollbars="vertical"
-        android:hint="@string/fooddetailed_description"
+        android:hint="@string/fooddescription"
         android:background="@drawable/food_detailed_et_style"/>
 
     <Button

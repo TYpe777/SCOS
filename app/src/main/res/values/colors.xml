@@ -27,4 +27,7 @@
     <!--Button中文本颜色-->
     <color name="text_default">#9F79EE</color>
     <color name="text_selected">#FFFFFF</color>
+
+    <!--常见-->
+    <color name="blue">#0000FF</color>
 </resources>

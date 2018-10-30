@@ -2,31 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+    android:paddingStart="3dp"
+    android:paddingEnd="3dp">
 
-    <TextView
-        android:id="@+id/tv_foodview_name"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:text="菜名"/>
+    <ImageView
+        android:id="@+id/iv_foodview_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/food_default"
+        android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/tv_foodview_price"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:text="价格"/>
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_foodview_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity = "center"
+            android:text="@string/foodname"/>
+
+        <TextView
+            android:id="@+id/tv_foodview_price"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/foodprice"/>
+
+        <TextView
+            android:id="@+id/tv_foodview_stock"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textColor="@color/blue"
+            android:text="@string/foodstock"/>
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btn_foodview_order"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
         android:background="@drawable/main_btn_style"
         android:focusable="false"
-        android:text="点菜"
+        android:layout_gravity="center"
+        android:text="@string/order"
         android:textColor="@drawable/main_txt_style"/>
 
 </LinearLayout>
