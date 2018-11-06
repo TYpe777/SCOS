@@ -2,8 +2,6 @@ package es.source.code.utils;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,7 +40,7 @@ public class FoodListProvider {
             JSONArray foodsArray = foodsJson.getJSONArray(listName);
             for(int i = 0; i<foodsArray.length(); i++){
                 JSONObject foodObject = foodsArray.getJSONObject(i);
-                food = foodGson(foodObject.toString());
+                food = GsonUtil.getFoodFromJsonWithGSON(foodObject.toString());
                 foodList.add(food);
             }
         }catch(Exception e) {
@@ -50,19 +48,6 @@ public class FoodListProvider {
         }
         return foodList;
     }
-
-    // 泛型。使用Gson反序列化
-    private static <T> T parseJsonWithGson(String jsonData, Class<T> type){
-        Gson gson = new Gson();
-        T result = gson.fromJson(jsonData, type);
-        return result;
-    }
-
-    // 将String反序列化为对应的Food对象
-    public static Food foodGson(String json){
-        return parseJsonWithGson(json, Food.class);
-    }
-
 
     /**
      *通过读不同的Json文件模拟服务器
@@ -86,7 +71,7 @@ public class FoodListProvider {
             JSONArray foodsArray = foodsJson.getJSONArray(listName);
             for(int i = 0; i<foodsArray.length(); i++){
                 JSONObject foodObject = foodsArray.getJSONObject(i);
-                food = foodGson(foodObject.toString());
+                food = GsonUtil.getFoodFromJsonWithGSON(foodObject.toString());
                 foodList.add(food);
             }
         }catch(Exception e) {

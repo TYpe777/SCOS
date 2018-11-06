@@ -5,18 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import es.source.code.model.User;
 import es.source.code.utils.Const;
+import es.source.code.utils.HttpURLConnectionUtil;
 
 /**
  * @author taoye
@@ -26,6 +34,8 @@ import es.source.code.utils.Const;
  */
 
 public class LoginOrRegister extends AppCompatActivity implements OnClickListener {
+    private static final String TAG = "LoginOrRegister";
+//    private static final String LOGIN_URL = HttpURLConnectionUtil.BASE_URL + "/LoginValidator"; // 登录验证的Servlet
 
     private Context mContext; // 上下文
     private Intent intent;
@@ -38,9 +48,6 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
     private Boolean isVaildUid = false; // 标记uid输入是否合法
     private Boolean isVaildPwd = false; // 标记pwd输入是否合法
     private User loginUser = null; // 登录或注册成功后创建的User实例
-
-    private String name,password;
-    private boolean oldUser;
 
     @Override
     protected void onCreate(Bundle saveInstanceState){
@@ -61,9 +68,9 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
         et_uid = (EditText) findViewById(R.id.et_uid);
         et_pwd = (EditText) findViewById(R.id.et_pwd);
 
-        sp = getSharedPreferences("User",Context.MODE_PRIVATE); // 初始化SharedPreference对象，私有模式
+        sp = getSharedPreferences("User", Context.MODE_PRIVATE); // 初始化SharedPreference对象，私有模式
         editor = sp.edit(); // 获取Editor对象
-        name = sp.getString("userName","#norecord");
+        String name = sp.getString("userName","#norecord");
         if(!"#norecord".equals(name)){
             btn_loginorregister.setText(getString(R.string.login_login)); // 判断SharedPreference中是否有userName的记录，若有则显示“登录”，否则显示“注册”
             et_uid.setText(name); // 将保存的userName显示在et_uid上
@@ -146,12 +153,12 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                 // 如果按钮上显示的是“登录”
                 if(getString(R.string.login_login).equals(btn_loginorregister.getText().toString())){
                     loadProgressDialog("login");
-                }else{
-                    loadProgressDialog("register"); // 如果按钮上显示的是“注册”
+                }else{ // 如果按钮上显示的是“注册”
+                    loadProgressDialog("register");
                 }
                 break;
             case R.id.btn_login_quit: // 退出
-                if(!"#norecord".equals(name)){ // 判断是否有userName记录
+                if(!"#norecord".equals(sp.getString("userName","#norecord"))){ // 判断是否有userName记录
                     editor.putInt("loginState",0);
                     editor.commit();
                 }
@@ -166,17 +173,15 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
 
     @Override
     public void onBackPressed(){
-        intent = new Intent();// setResult方法中携带的intent对象可以不使用显示Intent或则隐式Intent
-//        intent = new Intent(mContext,MainScreen.class);
-//        intent = new Intent("scos.intent.action.SCOSMAIN");
-        intent.putExtra(Const.IntentMsg.MESSAGE,Const.IntentMsg.MSG_RETURN);
+        intent = new Intent();// setResult方法中返回的intent对象既不是显示Intent也不是隐式Intent
+        intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_RETURN);
         setResult(Const.ResultCode.FROM_LOGINORREGISTER , intent);
         finish();
     }
 
     /**
      * Author: taoye
-     * Description: 绘制一个ProgressDialog，持续2秒钟。同时完成对uid和pwd的验证
+     * Description: 绘制一个ProgressDialog，持续2秒钟。同时完成对userName和password的验证
      */
     private void loadProgressDialog(String action){
         pd_load.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -190,32 +195,26 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                 public void run(){
                     try{
                         Thread.sleep(2000);
-                        pd_load.dismiss();
+                        pd_load.dismiss(); // 撤销进度条
+
                         if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
-                            name = et_uid.getText().toString();
-                            password = et_pwd.getText().toString();
-                            oldUser = true;
-                            loginUser = new User(name,password,oldUser);
-
-                            editor.putString("userName",name); // 通过Editor对象将userName写入SharedPrefrence
-                            editor.putInt("loginState",1);
-                            editor.commit(); // 将数据保存到xml文件中
-
-                            intent = new Intent();
-                            // 返回“登录成功”的信息给MainScreen
-                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_LOGIN_SUCC);
-                            // 返回一个User类实例loginUser
-                            intent.putExtra(Const.IntentMsg.USER, loginUser);
-                            setResult(Const.ResultCode.FROM_LOGINORREGISTER ,intent);
-                            finish();
-
-                            Looper.prepare();
-                            Toast.makeText(LoginOrRegister.this,"登录成功",Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            Map<String, String> parms = new HashMap<String, String>();
+                            parms.put("userName", et_uid.getText().toString());
+                            parms.put("password", et_pwd.getText().toString());
+                            String result = HttpURLConnectionUtil.getLoginStatusByHttp(Const.URL.LOGIN_URL, parms);
+                            Message message = Message.obtain();
+                            message.what = 0x10;
+                            Bundle bundle = new Bundle();
+                            bundle.putString("result", result);
+                            message.setData(bundle);
+                            handler.sendMessage(message);
                         }else {
-                            Looper.prepare();
-                            Toast.makeText(LoginOrRegister.this, "登录失败", Toast.LENGTH_LONG).show();
-                            Looper.loop();
+                            Message message = Message.obtain();
+                            message.what = 0x11;
+                            handler.sendMessage(message);
+//                            Looper.prepare();
+//                            Toast.makeText(LoginOrRegister.this, "登录失败", Toast.LENGTH_LONG).show();
+//                            Looper.loop();
                         }
                     } catch(InterruptedException e){
                         e.printStackTrace();
@@ -232,31 +231,21 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
                     try{
                         Thread.sleep(2000);
                         pd_load.dismiss();
-                        if(isVaildPwd && isVaildUid){ // 登录名和密码都正确
-                            name = et_uid.getText().toString();
-                            password = et_pwd.getText().toString();
-                            oldUser = false;
-                            loginUser = new User(name,password,oldUser);
-
-                            editor.putString("userName",name); // 通过Editor对象将userName写入SharedPrefrence
-                            editor.putInt("loginState",1);
-                            editor.commit(); // 将数据保存到xml文件中
-
-                            intent = new Intent();
-                            // 返回“注册成功”的信息给MainScreen
-                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_REGISTER_SUCC);
-                            // 返回一个User类实例loginUser
-                            intent.putExtra(Const.IntentMsg.USER, loginUser);
-                            setResult(Const.ResultCode.FROM_LOGINORREGISTER ,intent);
-                            finish();
-
-                            Looper.prepare();
-                            Toast.makeText(LoginOrRegister.this,"注册成功",Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                        if(isVaildPwd && isVaildUid){// 登录名和密码都正确
+                            Map<String, String> parms = new HashMap<String, String>();
+                            parms.put("userName", et_uid.getText().toString());
+                            parms.put("password", et_pwd.getText().toString());
+                            String result = HttpURLConnectionUtil.registerByHttp(Const.URL.REGISTER_URL, parms);
+                            Message message = Message.obtain();
+                            message.what = 0x12;
+                            Bundle bundle = new Bundle();
+                            bundle.putString("result", result);
+                            message.setData(bundle);
+                            handler.sendMessage(message);
                         }else {
-                            Looper.prepare();
-                            Toast.makeText(LoginOrRegister.this, "注册失败", Toast.LENGTH_LONG).show();
-                            Looper.loop();
+                            Message message = Message.obtain();
+                            message.what = 0x13;
+                            handler.sendMessage(message);
                         }
                     } catch(InterruptedException e){
                         e.printStackTrace();
@@ -265,4 +254,85 @@ public class LoginOrRegister extends AppCompatActivity implements OnClickListene
             }).start();
         }
     }
+
+    public Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            switch(msg.what){
+                case 0x10: {
+                    String value = msg.getData().getString("result");
+                    Log.i(TAG, value);
+                    try {
+                        JSONObject resultjson = new JSONObject(value);
+                        int result = (int)resultjson.get("RESULTCODE");
+                        if(result == -1){
+                            Toast.makeText(mContext, "网络连接有问题，请重试", Toast.LENGTH_SHORT).show();
+                        }else if(result == 0){
+                            Toast.makeText(mContext, "账号或密码有问题", Toast.LENGTH_SHORT).show();
+                        }else if(result == 1){
+                            boolean oldUser = true;
+                            loginUser = new User(et_uid.getText().toString(), et_pwd.getText().toString(), oldUser);
+
+                            editor.putString("userName", et_uid.getText().toString()); // 通过Editor对象将userName写入SharedPrefrence
+                            editor.putInt("loginState", 1);
+                            editor.commit(); // 将数据保存到xml文件中
+
+                            intent = new Intent();
+                            // 返回“登录成功”的信息给MainScreen
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_LOGIN_SUCC);
+                            // 返回一个User类实例loginUser
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);
+                            setResult(Const.ResultCode.FROM_LOGINORREGISTER, intent);
+                            finish();
+                            Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+                case 0x11:{
+                    Toast.makeText(mContext, "登录失败", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                case 0x12:{
+                    String value = msg.getData().getString("result");
+                    Log.i(TAG, value);
+                    try {
+                        JSONObject resultJson = new JSONObject(value);
+                        int result = resultJson.getInt("RESULTCODE");
+                        if(result == -1){
+                            Toast.makeText(mContext, "网络连接有问题，请重试", Toast.LENGTH_SHORT).show();
+                        }else if(result == 0){
+                            Toast.makeText(mContext, "用户名已存在", Toast.LENGTH_SHORT).show();
+                        }else if(result == 1) {
+                            boolean oldUser = false;
+                            loginUser = new User(et_uid.getText().toString(), et_pwd.getText().toString(), oldUser);
+
+                            editor.putString("userName", et_uid.getText().toString()); // 通过Editor对象将userName写入SharedPrefrence
+                            editor.putInt("loginState", 1);
+                            editor.commit(); // 将数据保存到xml文件中
+
+                            intent = new Intent();
+                            // 返回“注册成功”的信息给MainScreen
+                            intent.putExtra(Const.IntentMsg.MESSAGE, Const.IntentMsg.MSG_REGISTER_SUCC);
+                            // 返回一个User类实例loginUser
+                            intent.putExtra(Const.IntentMsg.USER, loginUser);
+                            setResult(Const.ResultCode.FROM_LOGINORREGISTER, intent);
+                            finish();
+
+                            Toast.makeText(mContext, "注册成功", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+                case 0x13:{
+                    Toast.makeText(mContext,"注册失败",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+        }
+    };
 }

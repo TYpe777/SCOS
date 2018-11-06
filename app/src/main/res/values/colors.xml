@@ -30,4 +30,6 @@
 
     <!--常见-->
     <color name="blue">#0000FF</color>
+    <color name="Black">#000000</color>
+    <color name="DarkGrey">#A9A9A9</color>
 </resources>

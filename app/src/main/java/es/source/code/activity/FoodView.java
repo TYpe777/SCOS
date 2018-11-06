@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,6 +34,7 @@ import es.source.code.model.Food;
 import es.source.code.model.OrderItem;
 import es.source.code.model.User;
 import es.source.code.service.ServerObserverService;
+import es.source.code.service.UpdateService;
 import es.source.code.utils.ColddishesProvider;
 import es.source.code.utils.Const;
 import es.source.code.utils.DrinksProvider;
@@ -237,17 +237,23 @@ public class FoodView extends AppCompatActivity implements Interface_HandleOrder
                 startActivityForResult(intent,Const.RequestCode.FOODVIEW_VIEWORDER);
                 break;
             case R.id.foodview_menu_help: // 系统帮助
-                // 测试代码
-                {
-                    String s = "";
-                    if(orderList.size()>0){
-                        for(int i = 0;i<orderList.size();i++){
-                            s += orderList.get(i).getFood().getName();
-                            s += ";";
-                        }
-                    }
-                    Toast.makeText(mContext, "已点了" + s, Toast.LENGTH_SHORT).show();
-                }
+                // 测试代码，显示所有已点菜品
+//                {
+//                    String s = "";
+//                    if(orderList.size()>0){
+//                        for(int i = 0;i<orderList.size();i++){
+//                            s += orderList.get(i).getFood().getName();
+//                            s += ";";
+//                        }
+//                    }
+//                    Toast.makeText(mContext, "已点了" + s, Toast.LENGTH_SHORT).show();
+//                }
+
+                // 点击后启动UpdateService。
+                // 这也不是这个菜单项的功能，但是为了更好的展示作业
+                Intent intent = new Intent(FoodView.this, UpdateService.class);
+                startService(intent);
+                Log.i(TAG, "启动菜品更新通知服务");
                 break;
         }
         return super.onOptionsItemSelected(item);

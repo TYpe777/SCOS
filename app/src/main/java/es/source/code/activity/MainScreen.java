@@ -131,13 +131,13 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         switch(message){
-            case Const.IntentMsg.MSG_FROM_ENTRY:
+            case Const.IntentMsg.MSG_FROM_ENTRY: // 从SCOSEntry
                 // 为GridView控件绑定适配器
                 gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                 isShowAll = true;
                 break;
 
-            case Const.IntentMsg.MSG_LOGIN_SUCC:
+            case Const.IntentMsg.MSG_LOGIN_SUCC: // 从LoginOrRegister， 登录成功
                 if(!isShowAll){
                     gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                     isShowAll = true;
@@ -145,7 +145,7 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
                 loginUser = (User) intent.getSerializableExtra(Const.IntentMsg.USER);
                 break;
 
-            case Const.IntentMsg.MSG_REGISTER_SUCC:
+            case Const.IntentMsg.MSG_REGISTER_SUCC: // 从LoginOrRegister， 注册成功
                 if(!isShowAll){
                     gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
                     isShowAll = true;
@@ -154,11 +154,17 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
                 Toast.makeText(mContext, "欢迎您成为 SCOS 新用户", Toast.LENGTH_SHORT).show();
                 break;
 
-            case Const.IntentMsg.MSG_NOT_LOGIN:
+            case Const.IntentMsg.MSG_NOT_LOGIN: // 未登录
                 int[] images1 = {R.mipmap.ic_login_navigation,R.mipmap.ic_help_navigation};
                 String[] texts1 = {"登录/注册","系统帮助"};
                 gv_navigation.setAdapter(new NavigationAdapter(this, images1, texts1));
                 isShowAll = false;
+                break;
+
+            case Const.IntentMsg.MSG_FROM_FOODUPDATE_NOTIFICATION: // 从FoodUpdate的通知，已登陆
+                // 为GridView控件绑定适配器
+                gv_navigation.setAdapter(new NavigationAdapter(this, images, texts));
+                isShowAll = true;
                 break;
 
             default:

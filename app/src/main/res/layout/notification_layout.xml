@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp">
+
+    <ImageView
+        android:id="@+id/iv_noti_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/ic_launcher"/>
+    
+    <TextView
+        android:id="@+id/tv_noti_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/iv_noti_image"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/Black"
+        android:text="@string/noti_title"/>
+
+    <TextView
+        android:id="@+id/tv_noti_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_noti_title"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/iv_noti_image"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/DarkGrey"
+        android:text="@string/noti_content"/>
+
+    <Button
+        android:id="@+id/btn_noti_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/noti_clear"/>
+
+</RelativeLayout>

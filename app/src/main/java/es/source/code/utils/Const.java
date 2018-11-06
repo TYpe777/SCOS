@@ -37,6 +37,8 @@ public class Const {
         public static final String MSG_REGISTER_SUCC = "RegisterSuccess";
         // 从LoginOrRegister的“返回键”返回MainScreen
         public static final String MSG_RETURN = "Return";
+        // 点击菜品更新的通知，跳转到MainScreen
+        public static final String MSG_FROM_FOODUPDATE_NOTIFICATION = "FromFoodUpdateNotification";
     }
 
     public static class InputRegularExpr {
@@ -79,5 +81,12 @@ public class Const {
         public static final String PWD_FROMAT_ERROR = "输入内容不符合规则";
         // 提示pwd未达到字符数要求
         public static final String PWD_NUMBER_ERROR = "密码不得少于6位";
+    }
+
+    public static class URL{
+        public static final String BASE_URL = "http://192.168.191.1:8080/SCOSServer";
+        public static final String LOGIN_URL = BASE_URL + "/LoginValidator";
+        public static final String FOODUPDATE_URL = BASE_URL + "/FoodUpdateService";
+        public static final String REGISTER_URL = BASE_URL + "/register";
     }
 }

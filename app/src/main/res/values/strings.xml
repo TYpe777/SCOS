@@ -36,4 +36,9 @@
     <string name="foodview_menu_ordered">已点菜品</string>
     <string name="foodview_menu_viewOrders">查看订单</string>
     <string name="foodview_menu_help">呼叫帮助</string>
+
+    <!--自定义通知-->
+    <string name="noti_title">通知标题</string>
+    <string name="noti_content">通知内容</string>
+    <string name="noti_clear">清除</string>
 </resources>
